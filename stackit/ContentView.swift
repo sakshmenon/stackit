@@ -2,20 +2,17 @@
 //  ContentView.swift
 //  stackit
 //
-//  Created by saksh menon on 2/25/26.
+//  Root content: main daily view (PRD main page architecture).
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello World!")
-        }
-        .padding()
+        MainDailyView(
+            currentTask: nil,
+            progress: .empty
+        )
     }
 }
 

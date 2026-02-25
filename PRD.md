@@ -7,7 +7,7 @@ Stackit is a minimalistic daily scheduler and task tracker for iOS that prioriti
 
 **Strategic Alignment**  
 - **Business objectives supported**:  
-  - **Promote productivity** for young adults by increasing completed tasks per day.  
+  - **Promote productivity** for young adults with a minimalistic UI and rewarding users for task completion.
   - **Drive user growth and retention** through habitual daily use driven by reminders and rewards.  
   - **Enable future monetization** via premium features (advanced analytics, custom themes, integrations), once a strong active user base is established.
 - **User problems solved**:  

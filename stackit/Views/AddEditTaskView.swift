@@ -61,8 +61,12 @@ struct AddEditTaskView: View {
                 TextField("Task or event title", text: $title)
             }
             Section("Notes") {
+#if os(iOS)
                 TextField("Optional notes", text: $notes, axis: .vertical)
                     .lineLimit(3...6)
+#else
+                TextField("Optional notes", text: $notes)
+#endif
             }
             Section("Type") {
                 Picker("Type", selection: $itemType) {
@@ -92,8 +96,12 @@ struct AddEditTaskView: View {
                 if hasEndTime {
                     DatePicker("End", selection: $scheduledEnd, displayedComponents: .hourAndMinute)
                 }
+#if os(iOS)
                 TextField("Est. minutes (optional)", text: $estimatedMinutes)
                     .keyboardType(.numberPad)
+#else
+                TextField("Est. minutes (optional)", text: $estimatedMinutes)
+#endif
             }
             Section("Recurrence") {
                 Picker("Repeats", selection: $recurrenceOption) {

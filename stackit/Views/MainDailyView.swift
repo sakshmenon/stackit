@@ -67,6 +67,7 @@ struct MainDailyView: View {
                     Image(systemName: "plus.circle")
                 }
             }
+#if os(iOS)
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     onOpenSettings?()
@@ -74,6 +75,7 @@ struct MainDailyView: View {
                     Image(systemName: "gearshape")
                 }
             }
+#endif
         }
     }
 }

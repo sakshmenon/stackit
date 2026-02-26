@@ -121,13 +121,13 @@ private struct TimelineTaskRowView: View {
                     } else if isCurrent {
                         Text("Current")
                             .font(.caption2.weight(.medium))
-                            .foregroundStyle(.accentColor)
+                            .foregroundStyle(Color.accentColor)
                     }
                 }
             }
             .padding(8)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(isCurrent ? Color.accentColor.opacity(0.08) : Color(.secondarySystemBackground))
+            .background(isCurrent ? Color.accentColor.opacity(0.08) : Color.gray.opacity(0.1))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .contentShape(Rectangle())
             .onTapGesture {

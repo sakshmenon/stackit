@@ -12,4 +12,5 @@ enum AppRoute: Hashable {
     case settings
     case taskDetail(TaskItem)
     case addTask
+    case editTask(ScheduleItem)
 }

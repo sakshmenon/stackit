@@ -2,7 +2,7 @@
 //  TaskItem.swift
 //  stackit
 //
-//  Minimal model for main-screen display. Full task/event model to be extended in data layer.
+//  Lightweight display model for the main daily view. Full domain model: ScheduleItem (ScheduleItem.swift).
 //
 
 import Foundation
@@ -52,6 +52,18 @@ struct TaskItem: Identifiable, Equatable, Hashable {
         self.scheduledEnd = scheduledEnd
         self.isCompleted = isCompleted
         self.completedAt = completedAt
+    }
+
+    /// Create a display task from a full schedule item (task or event).
+    init(from item: ScheduleItem) {
+        self.id = item.id
+        self.title = item.title
+        self.notes = item.notes
+        self.priority = item.priority
+        self.scheduledStart = item.scheduledStart
+        self.scheduledEnd = item.scheduledEnd
+        self.isCompleted = item.isCompleted
+        self.completedAt = item.completedAt
     }
 }
 

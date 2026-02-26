@@ -9,16 +9,21 @@ import SwiftUI
 
 /// Holds the main navigation stack and routes to Settings, Task Detail, and Add Task.
 struct RootContainerView: View {
+    @EnvironmentObject private var scheduleStore: ScheduleStore
     @State private var navigationPath = [AppRoute]()
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
             MainDailyView(
-                currentTask: nil,
-                progress: .empty,
+                currentTask: scheduleStore.currentTask,
+                progress: scheduleStore.progress,
                 onOpenSettings: { navigationPath.append(.settings) },
                 onOpenTask: { navigationPath.append(.taskDetail($0)) },
-                onAddTask: { navigationPath.append(.addTask) }
+                onAddTask: { navigationPath.append(.addTask) },
+                onCompleteCurrentTask: {
+                    guard let t = scheduleStore.currentTask else { return }
+                    scheduleStore.setCompleted(id: t.id, completed: true)
+                }
             )
             .navigationDestination(for: AppRoute.self) { route in
                 destinationView(for: route)
@@ -32,13 +37,18 @@ struct RootContainerView: View {
         case .settings:
             SettingsView()
         case .taskDetail(let task):
-            TaskDetailView(task: task)
+            TaskDetailView(task: task) { item in
+                navigationPath.append(.editTask(item))
+            }
         case .addTask:
-            AddTaskPlaceholderView()
+            AddEditTaskView(initialItem: nil)
+        case .editTask(let item):
+            AddEditTaskView(initialItem: item)
         }
     }
 }
 
 #Preview {
     RootContainerView()
+        .environmentObject(ScheduleStore(repository: InMemoryScheduleItemRepository()))
 }

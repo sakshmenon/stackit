@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-/// Card showing the task at hand: title, priority, and optional time.
+/// Card showing the task at hand: title, priority, optional time, and optional Complete action.
 struct CurrentTaskCardView: View {
     let task: TaskItem?
     /// Called when the user taps the card (only when `task` is non-nil).
     var onTap: (() -> Void)?
+    /// Called when the user taps Complete. Shown only when `task` is non-nil and not already completed.
+    var onComplete: (() -> Void)?
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -37,6 +39,17 @@ struct CurrentTaskCardView: View {
                             Label(CurrentTaskCardView.timeFormatter.string(from: start), systemImage: "clock")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        if !task.isCompleted, onComplete != nil {
+                            Button {
+                                onComplete?()
+                            } label: {
+                                Text("Complete")
+                                    .font(.caption.weight(.medium))
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.green)
                         }
                     }
                 }
@@ -81,7 +94,8 @@ struct CurrentTaskCardView: View {
             priority: .high,
             scheduledStart: Date()
         ),
-        onTap: nil
+        onTap: nil,
+        onComplete: nil
     )
     .padding()
 }

@@ -18,19 +18,22 @@ struct MainDailyView: View {
     var onOpenSettings: (() -> Void)?
     var onOpenTask: ((TaskItem) -> Void)?
     var onAddTask: (() -> Void)?
+    var onCompleteCurrentTask: (() -> Void)?
 
     init(
         currentTask: TaskItem? = nil,
         progress: DailyProgress = .empty,
         onOpenSettings: (() -> Void)? = nil,
         onOpenTask: ((TaskItem) -> Void)? = nil,
-        onAddTask: (() -> Void)? = nil
+        onAddTask: (() -> Void)? = nil,
+        onCompleteCurrentTask: (() -> Void)? = nil
     ) {
         self.currentTask = currentTask
         self.progress = progress
         self.onOpenSettings = onOpenSettings
         self.onOpenTask = onOpenTask
         self.onAddTask = onAddTask
+        self.onCompleteCurrentTask = onCompleteCurrentTask
     }
 
     var body: some View {
@@ -38,9 +41,11 @@ struct MainDailyView: View {
             VStack(alignment: .leading, spacing: 24) {
                 DateTimeHeaderView()
                 DailyProgressView(progress: progress)
-                CurrentTaskCardView(task: currentTask) {
-                    if let currentTask { onOpenTask?(currentTask) }
-                }
+                CurrentTaskCardView(
+                    task: currentTask,
+                    onTap: { if let currentTask { onOpenTask?(currentTask) } },
+                    onComplete: onCompleteCurrentTask
+                )
             }
             .padding()
         }

@@ -2,19 +2,11 @@
 //  SupabaseClient+Shared.swift
 //  stackit
 //
-//  Shared Supabase client for auth and database. Uses SupabaseConfig.
+//  Convenience accessor so call sites can use SupabaseClient.shared.
 //
 
-import Foundation
 import Supabase
 
 extension SupabaseClient {
-    private static let _shared: SupabaseClient = {
-        SupabaseClient(
-            supabaseURL: SupabaseConfig.url,
-            supabaseKey: SupabaseConfig.anonKey
-        )
-    }()
-
-    static var shared: SupabaseClient { _shared }
+    static var shared: SupabaseClient { supabase }
 }

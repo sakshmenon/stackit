@@ -16,7 +16,9 @@ struct AddTaskPlaceholderView: View {
             description: Text("Task creation form will be added in the next sprint.")
         )
         .navigationTitle("New Task")
+#if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+#endif
     }
 }
 

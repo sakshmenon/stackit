@@ -58,7 +58,7 @@ struct MainDailyView: View {
             }
             .padding()
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color(.sRGB, red: 0.95, green: 0.95, blue: 0.98, opacity: 1.0))
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

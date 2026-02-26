@@ -79,14 +79,14 @@ private struct TimelineTaskRowView: View {
             // Timeline rail with dot
             VStack(spacing: 0) {
                 Rectangle()
-                    .fill(Color(.systemGray4))
+                    .fill(Color.gray.opacity(0.3))
                     .frame(width: 2)
                     .opacity(isFirst ? 0 : 1)
                 Circle()
-                    .fill(isCurrent ? Color.accentColor : Color(.systemGray3))
+                    .fill(isCurrent ? Color.accentColor : Color.gray.opacity(0.6))
                     .frame(width: 10, height: 10)
                 Rectangle()
-                    .fill(Color(.systemGray4))
+                    .fill(Color.gray.opacity(0.3))
                     .frame(width: 2)
                     .opacity(isLast ? 0 : 1)
             }

@@ -53,7 +53,9 @@ struct TaskDetailView: View {
             }
         }
         .navigationTitle(task.title)
+#if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+#endif
     }
 }
 

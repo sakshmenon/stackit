@@ -104,7 +104,9 @@ struct AddEditTaskView: View {
             }
         }
         .navigationTitle(isEditing ? "Edit" : "New Task")
+#if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+#endif
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {

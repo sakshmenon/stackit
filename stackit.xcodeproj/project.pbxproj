@@ -33,6 +33,7 @@
 		9D20EEF72F4F5210003ED567 /* SupabaseClient+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */; };
 		9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF42F4F5210003ED567 /* AuthService.swift */; };
 		9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF52F4F5210003ED567 /* LoginView.swift */; };
+		9D581FC62F50FCE600758D14 /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D581FC52F50FCE600758D14 /* SupabaseConfig.swift */; };
 		9DE9480A2F50F61F009F577D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9D20EEF12F4F5210003ED567 /* Supabase */; };
 		9DE9480C2F50F651009F577D /* Supabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9480B2F50F651009F577D /* Supabase.swift */; };
 		9DE9736D2F501F0E0065FADE /* TimelineTaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */; };
@@ -86,7 +87,8 @@
 		9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupabaseClient+Shared.swift"; sourceTree = "<group>"; };
 		9D20EEF42F4F5210003ED567 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		9D20EEF52F4F5210003ED567 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		9DE9480B2F50F651009F577D /* Supabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Supabase.swift; path = stackit/Services/Supabase.swift; sourceTree = "<group>"; };
+		9D581FC52F50FCE600758D14 /* SupabaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
+		9DE9480B2F50F651009F577D /* Supabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
 		9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineTaskListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,7 +121,6 @@
 		9D20EE542F4F5207003ED567 = {
 			isa = PBXGroup;
 			children = (
-				9DE9480B2F50F651009F577D /* Supabase.swift */,
 				9D20EE5F2F4F5207003ED567 /* stackit */,
 				9D20EE712F4F5209003ED567 /* stackitTests */,
 				9D20EE7B2F4F5209003ED567 /* stackitUITests */,
@@ -227,7 +228,9 @@
 				9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */,
 				9D20EEF42F4F5210003ED567 /* AuthService.swift */,
 				9D20EEC02F4F5210003ED567 /* ScheduleItemRepository.swift */,
+				9DE9480B2F50F651009F577D /* Supabase.swift */,
 				9D20EEC12F4F5210003ED567 /* InMemoryScheduleItemRepository.swift */,
+				9D581FC52F50FCE600758D14 /* SupabaseConfig.swift */,
 				9D20EEC22F4F5210003ED567 /* CurrentTaskScheduler.swift */,
 				9D20EEC32F4F5210003ED567 /* ScheduleStore.swift */,
 			);
@@ -387,6 +390,7 @@
 				9D20EEB92F4F5210003ED567 /* AddTaskPlaceholderView.swift in Sources */,
 				9D20EED42F4F5210003ED567 /* AddEditTaskView.swift in Sources */,
 				9D20EED02F4F5210003ED567 /* ScheduleItemRepository.swift in Sources */,
+				9D581FC62F50FCE600758D14 /* SupabaseConfig.swift in Sources */,
 				9D20EED12F4F5210003ED567 /* InMemoryScheduleItemRepository.swift in Sources */,
 				9D20EED22F4F5210003ED567 /* CurrentTaskScheduler.swift in Sources */,
 				9D20EED32F4F5210003ED567 /* ScheduleStore.swift in Sources */,

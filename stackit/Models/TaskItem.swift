@@ -23,7 +23,8 @@ enum TaskPriority: Int, CaseIterable, Codable {
 }
 
 /// Lightweight task representation for the daily view. Supports offline-first (NFR-2).
-struct TaskItem: Identifiable, Equatable {
+struct TaskItem: Identifiable, Equatable, Hashable {
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
     let id: UUID
     var title: String
     var notes: String

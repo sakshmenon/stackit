@@ -10,6 +10,8 @@ import SwiftUI
 /// Card showing the task at hand: title, priority, and optional time.
 struct CurrentTaskCardView: View {
     let task: TaskItem?
+    /// Called when the user taps the card (only when `task` is non-nil).
+    var onTap: (() -> Void)?
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -42,6 +44,10 @@ struct CurrentTaskCardView: View {
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    onTap?()
+                }
             } else {
                 VStack(spacing: 8) {
                     Image(systemName: "checkmark.circle")
@@ -69,11 +75,14 @@ struct CurrentTaskCardView: View {
 }
 
 #Preview("With task") {
-    CurrentTaskCardView(task: TaskItem(
-        title: "Review PRD",
-        priority: .high,
-        scheduledStart: Date()
-    ))
+    CurrentTaskCardView(
+        task: TaskItem(
+            title: "Review PRD",
+            priority: .high,
+            scheduledStart: Date()
+        ),
+        onTap: nil
+    )
     .padding()
 }
 

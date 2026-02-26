@@ -14,6 +14,11 @@
 		9D20EEB22F4F5210003ED567 /* DailyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEA22F4F5210003ED567 /* DailyProgressView.swift */; };
 		9D20EEB32F4F5210003ED567 /* CurrentTaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEA32F4F5210003ED567 /* CurrentTaskCardView.swift */; };
 		9D20EEB42F4F5210003ED567 /* MainDailyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEA42F4F5210003ED567 /* MainDailyView.swift */; };
+		9D20EEB52F4F5210003ED567 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEA82F4F5210003ED567 /* AppRoute.swift */; };
+		9D20EEB62F4F5210003ED567 /* RootContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEA92F4F5210003ED567 /* RootContainerView.swift */; };
+		9D20EEB72F4F5210003ED567 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEAA2F4F5210003ED567 /* SettingsView.swift */; };
+		9D20EEB82F4F5210003ED567 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEAB2F4F5210003ED567 /* TaskDetailView.swift */; };
+		9D20EEB92F4F5210003ED567 /* AddTaskPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEAC2F4F5210003ED567 /* AddTaskPlaceholderView.swift */; };
 		9D20EE652F4F5209003ED567 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D20EE642F4F5209003ED567 /* Assets.xcassets */; };
 		9D20EE692F4F5209003ED567 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D20EE682F4F5209003ED567 /* Preview Assets.xcassets */; };
 		9D20EE732F4F5209003ED567 /* stackitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EE722F4F5209003ED567 /* stackitTests.swift */; };
@@ -55,6 +60,11 @@
 		9D20EEA22F4F5210003ED567 /* DailyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyProgressView.swift; sourceTree = "<group>"; };
 		9D20EEA32F4F5210003ED567 /* CurrentTaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTaskCardView.swift; sourceTree = "<group>"; };
 		9D20EEA42F4F5210003ED567 /* MainDailyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDailyView.swift; sourceTree = "<group>"; };
+		9D20EEA82F4F5210003ED567 /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
+		9D20EEA92F4F5210003ED567 /* RootContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootContainerView.swift; sourceTree = "<group>"; };
+		9D20EEAA2F4F5210003ED567 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9D20EEAB2F4F5210003ED567 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		9D20EEAC2F4F5210003ED567 /* AddTaskPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskPlaceholderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +118,7 @@
 				9D20EE602F4F5207003ED567 /* stackitApp.swift */,
 				9D20EE622F4F5207003ED567 /* ContentView.swift */,
 				9D20EEA52F4F5210003ED567 /* Models */,
+				9D20EEAD2F4F5210003ED567 /* Navigation */,
 				9D20EEA62F4F5210003ED567 /* Views */,
 				9D20EE642F4F5209003ED567 /* Assets.xcassets */,
 				9D20EE662F4F5209003ED567 /* stackit.entitlements */,
@@ -124,10 +135,22 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		9D20EEAD2F4F5210003ED567 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				9D20EEA82F4F5210003ED567 /* AppRoute.swift */,
+				9D20EEA92F4F5210003ED567 /* RootContainerView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		9D20EEA62F4F5210003ED567 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				9D20EEA42F4F5210003ED567 /* MainDailyView.swift */,
+				9D20EEAA2F4F5210003ED567 /* SettingsView.swift */,
+				9D20EEAB2F4F5210003ED567 /* TaskDetailView.swift */,
+				9D20EEAC2F4F5210003ED567 /* AddTaskPlaceholderView.swift */,
 				9D20EEA72F4F5210003ED567 /* Components */,
 			);
 			path = Views;
@@ -305,6 +328,11 @@
 				9D20EEB22F4F5210003ED567 /* DailyProgressView.swift in Sources */,
 				9D20EEB32F4F5210003ED567 /* CurrentTaskCardView.swift in Sources */,
 				9D20EEB42F4F5210003ED567 /* MainDailyView.swift in Sources */,
+				9D20EEB52F4F5210003ED567 /* AppRoute.swift in Sources */,
+				9D20EEB62F4F5210003ED567 /* RootContainerView.swift in Sources */,
+				9D20EEB72F4F5210003ED567 /* SettingsView.swift in Sources */,
+				9D20EEB82F4F5210003ED567 /* TaskDetailView.swift in Sources */,
+				9D20EEB92F4F5210003ED567 /* AddTaskPlaceholderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,10 +14,23 @@ struct MainDailyView: View {
     var currentTask: TaskItem?
     /// Today's progress for the progress indicator.
     var progress: DailyProgress
+    /// Navigation callbacks; optional so the view can be used in previews without a container.
+    var onOpenSettings: (() -> Void)?
+    var onOpenTask: ((TaskItem) -> Void)?
+    var onAddTask: (() -> Void)?
 
-    init(currentTask: TaskItem? = nil, progress: DailyProgress = .empty) {
+    init(
+        currentTask: TaskItem? = nil,
+        progress: DailyProgress = .empty,
+        onOpenSettings: (() -> Void)? = nil,
+        onOpenTask: ((TaskItem) -> Void)? = nil,
+        onAddTask: (() -> Void)? = nil
+    ) {
         self.currentTask = currentTask
         self.progress = progress
+        self.onOpenSettings = onOpenSettings
+        self.onOpenTask = onOpenTask
+        self.onAddTask = onAddTask
     }
 
     var body: some View {
@@ -25,11 +38,29 @@ struct MainDailyView: View {
             VStack(alignment: .leading, spacing: 24) {
                 DateTimeHeaderView()
                 DailyProgressView(progress: progress)
-                CurrentTaskCardView(task: currentTask)
+                CurrentTaskCardView(task: currentTask) {
+                    if let currentTask { onOpenTask?(currentTask) }
+                }
             }
             .padding()
         }
         .background(Color(.systemGroupedBackground))
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    onAddTask?()
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+            }
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    onOpenSettings?()
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+            }
+        }
     }
 }
 

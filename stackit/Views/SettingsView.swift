@@ -2,18 +2,28 @@
 //  SettingsView.swift
 //  stackit
 //
-//  Placeholder for account and app settings (PRD FR-14). To be expanded with logout, notifications, privacy.
+//  Account and app settings; sign out (PRD FR-14).
 //
 
 import SwiftUI
 
-/// Settings and account screen. Scaffolding only; full implementation in later sprint.
+/// Settings: account (email, sign out) and app options.
 struct SettingsView: View {
+    @EnvironmentObject private var authService: AuthService
+
     var body: some View {
         List {
             Section("Account") {
-                Text("Sign in / Account")
-                    .foregroundStyle(.secondary)
+                if let email = authService.email {
+                    LabeledContent("Email", value: email)
+                }
+                Button(role: .destructive) {
+                    Task {
+                        try? await authService.signOut()
+                    }
+                } label: {
+                    Label("Sign out", systemImage: "rectangle.portrait.and.arrow.right")
+                }
             }
             Section("App") {
                 Text("Notifications")
@@ -30,5 +40,6 @@ struct SettingsView: View {
 #Preview {
     NavigationStack {
         SettingsView()
+            .environmentObject(AuthService())
     }
 }

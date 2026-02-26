@@ -31,6 +31,10 @@
 		9D20EED32F4F5210003ED567 /* ScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEC32F4F5210003ED567 /* ScheduleStore.swift */; };
 		9D20EED42F4F5210003ED567 /* AddEditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEC52F4F5210003ED567 /* AddEditTaskView.swift */; };
 		9DE9736D2F501F0E0065FADE /* TimelineTaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */; };
+		9D20EEF62F4F5210003ED567 /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF22F4F5210003ED567 /* SupabaseConfig.swift */; };
+		9D20EEF72F4F5210003ED567 /* SupabaseClient+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */; };
+		9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF42F4F5210003ED567 /* AuthService.swift */; };
+		9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF52F4F5210003ED567 /* LoginView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +83,10 @@
 		9D20EEC32F4F5210003ED567 /* ScheduleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleStore.swift; sourceTree = "<group>"; };
 		9D20EEC52F4F5210003ED567 /* AddEditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditTaskView.swift; sourceTree = "<group>"; };
 		9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineTaskListView.swift; sourceTree = "<group>"; };
+		9D20EEF22F4F5210003ED567 /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
+		9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupabaseClient+Shared.swift"; sourceTree = "<group>"; };
+		9D20EEF42F4F5210003ED567 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		9D20EEF52F4F5210003ED567 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +187,7 @@
 		9D20EEA62F4F5210003ED567 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9D20EEF52F4F5210003ED567 /* LoginView.swift */,
 				9D20EEA42F4F5210003ED567 /* MainDailyView.swift */,
 				9D20EEC52F4F5210003ED567 /* AddEditTaskView.swift */,
 				9D20EEAA2F4F5210003ED567 /* SettingsView.swift */,
@@ -212,6 +221,9 @@
 		9D20EEC42F4F5210003ED567 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				9D20EEF22F4F5210003ED567 /* SupabaseConfig.swift */,
+				9D20EEF32F4F5210003ED567 /* SupabaseClient+Shared.swift */,
+				9D20EEF42F4F5210003ED567 /* AuthService.swift */,
 				9D20EEC02F4F5210003ED567 /* ScheduleItemRepository.swift */,
 				9D20EEC12F4F5210003ED567 /* InMemoryScheduleItemRepository.swift */,
 				9D20EEC22F4F5210003ED567 /* CurrentTaskScheduler.swift */,
@@ -236,6 +248,9 @@
 			dependencies = (
 			);
 			name = stackit;
+			packageProductDependencies = (
+				9D20EEF12F4F5210003ED567 /* Supabase */,
+			);
 			productName = stackit;
 			productReference = 9D20EE5D2F4F5207003ED567 /* stackit.app */;
 			productType = "com.apple.product-type.application";
@@ -308,6 +323,9 @@
 				Base,
 			);
 			mainGroup = 9D20EE542F4F5207003ED567;
+			packageReferences = (
+				9D20EEF02F4F5210003ED567 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			productRefGroup = 9D20EE5E2F4F5207003ED567 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -369,6 +387,10 @@
 				9D20EED12F4F5210003ED567 /* InMemoryScheduleItemRepository.swift in Sources */,
 				9D20EED22F4F5210003ED567 /* CurrentTaskScheduler.swift in Sources */,
 				9D20EED32F4F5210003ED567 /* ScheduleStore.swift in Sources */,
+				9D20EEF62F4F5210003ED567 /* SupabaseConfig.swift in Sources */,
+				9D20EEF72F4F5210003ED567 /* SupabaseClient+Shared.swift in Sources */,
+				9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */,
+				9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,6 +739,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9D20EEF02F4F5210003ED567 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9D20EEF12F4F5210003ED567 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9D20EEF02F4F5210003ED567 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9D20EE552F4F5207003ED567 /* Project object */;
 }

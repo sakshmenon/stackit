@@ -8,10 +8,12 @@
 
 import SwiftUI
 
-/// Main screen showing today's date, time, daily progress, and the task at hand.
+/// Main screen showing today's date, time, daily progress, current task, and today's schedule.
 struct MainDailyView: View {
     /// Current task suggested by the scheduler. Nil when none or all done.
     var currentTask: TaskItem?
+    /// All tasks/events for today, used to build the timeline list.
+    var todayTasks: [TaskItem]
     /// Today's progress for the progress indicator.
     var progress: DailyProgress
     /// Navigation callbacks; optional so the view can be used in previews without a container.
@@ -22,6 +24,7 @@ struct MainDailyView: View {
 
     init(
         currentTask: TaskItem? = nil,
+        todayTasks: [TaskItem] = [],
         progress: DailyProgress = .empty,
         onOpenSettings: (() -> Void)? = nil,
         onOpenTask: ((TaskItem) -> Void)? = nil,
@@ -29,6 +32,7 @@ struct MainDailyView: View {
         onCompleteCurrentTask: (() -> Void)? = nil
     ) {
         self.currentTask = currentTask
+        self.todayTasks = todayTasks
         self.progress = progress
         self.onOpenSettings = onOpenSettings
         self.onOpenTask = onOpenTask
@@ -45,6 +49,11 @@ struct MainDailyView: View {
                     task: currentTask,
                     onTap: { if let currentTask { onOpenTask?(currentTask) } },
                     onComplete: onCompleteCurrentTask
+                )
+                TimelineTaskListView(
+                    tasks: todayTasks,
+                    currentTaskId: currentTask?.id,
+                    onSelect: { onOpenTask?($0) }
                 )
             }
             .padding()
@@ -79,10 +88,29 @@ struct MainDailyView: View {
             priority: .high,
             scheduledStart: Date()
         ),
-        progress: DailyProgress(completedCount: 3, totalCount: 8)
+        todayTasks: [
+            TaskItem(
+                title: "Morning deep work",
+                priority: .high,
+                scheduledStart: Date().addingTimeInterval(-3600),
+                isCompleted: true
+            ),
+            TaskItem(
+                title: "Ship Stackit MVP",
+                priority: .high,
+                scheduledStart: Date().addingTimeInterval(600)
+            ),
+            TaskItem(
+                title: "Workout",
+                priority: .low,
+                scheduledStart: Date().addingTimeInterval(3600)
+            )
+        ],
+        progress: DailyProgress(completedCount: 1, totalCount: 3)
     )
 }
 
 #Preview("Empty state") {
     MainDailyView(progress: .empty)
 }
+

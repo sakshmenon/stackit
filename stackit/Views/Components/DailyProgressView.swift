@@ -25,7 +25,7 @@ struct DailyProgressView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(Color(.systemGray5))
+                        .fill(Color(.gray))
                     RoundedRectangle(cornerRadius: 2)
                         .fill(Color.accentColor)
                         .frame(width: max(0, geo.size.width * progress.completionRate))

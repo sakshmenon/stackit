@@ -16,6 +16,7 @@ struct RootContainerView: View {
         NavigationStack(path: $navigationPath) {
             MainDailyView(
                 currentTask: scheduleStore.currentTask,
+                todayTasks: scheduleStore.todayItems.map(TaskItem.init(from:)),
                 progress: scheduleStore.progress,
                 onOpenSettings: { navigationPath.append(.settings) },
                 onOpenTask: { navigationPath.append(.taskDetail($0)) },

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var authService = AuthService()
+    @StateObject private var authService = AuthService() 
     @StateObject private var scheduleStore: ScheduleStore = {
         let repo = InMemoryScheduleItemRepository()
         return ScheduleStore(repository: repo)

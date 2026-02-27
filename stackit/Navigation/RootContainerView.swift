@@ -20,7 +20,7 @@ struct RootContainerView: View {
                 progress: scheduleStore.progress,
                 onOpenSettings: { navigationPath.append(.settings) },
                 onOpenTask: { navigationPath.append(.taskDetail($0)) },
-                onAddTask: { navigationPath.append(.addTask) },
+                onAddTask: { type in navigationPath.append(.addTask(type)) },
                 onCompleteCurrentTask: {
                     guard let t = scheduleStore.currentTask else { return }
                     scheduleStore.setCompleted(id: t.id, completed: true)
@@ -41,8 +41,8 @@ struct RootContainerView: View {
             TaskDetailView(task: task) { item in
                 navigationPath.append(.editTask(item))
             }
-        case .addTask:
-            AddEditTaskView(initialItem: nil)
+        case .addTask(let type):
+            AddEditTaskView(initialItem: nil, initialType: type)
         case .editTask(let item):
             AddEditTaskView(initialItem: item)
         }

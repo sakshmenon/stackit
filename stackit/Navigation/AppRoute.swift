@@ -11,6 +11,6 @@ import Foundation
 enum AppRoute: Hashable {
     case settings
     case taskDetail(TaskItem)
-    case addTask
+    case addTask(ScheduleItemType)
     case editTask(ScheduleItem)
 }

@@ -10,17 +10,16 @@ import SwiftUI
 
 /// Main screen showing today's date, time, daily progress, current task, and today's schedule.
 struct MainDailyView: View {
-    /// Current task suggested by the scheduler. Nil when none or all done.
     var currentTask: TaskItem?
-    /// All tasks/events for today, used to build the timeline list.
     var todayTasks: [TaskItem]
-    /// Today's progress for the progress indicator.
     var progress: DailyProgress
-    /// Navigation callbacks; optional so the view can be used in previews without a container.
     var onOpenSettings: (() -> Void)?
     var onOpenTask: ((TaskItem) -> Void)?
-    var onAddTask: (() -> Void)?
+    var onAddTask: ((ScheduleItemType) -> Void)?
     var onCompleteCurrentTask: (() -> Void)?
+
+    @State private var showAddTypeSheet = false
+    @State private var pendingAddType: ScheduleItemType?
 
     init(
         currentTask: TaskItem? = nil,
@@ -28,7 +27,7 @@ struct MainDailyView: View {
         progress: DailyProgress = .empty,
         onOpenSettings: (() -> Void)? = nil,
         onOpenTask: ((TaskItem) -> Void)? = nil,
-        onAddTask: (() -> Void)? = nil,
+        onAddTask: ((ScheduleItemType) -> Void)? = nil,
         onCompleteCurrentTask: (() -> Void)? = nil
     ) {
         self.currentTask = currentTask
@@ -41,32 +40,42 @@ struct MainDailyView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                DateTimeHeaderView()
-                DailyProgressView(progress: progress)
-                CurrentTaskCardView(
-                    task: currentTask,
-                    onTap: { if let currentTask { onOpenTask?(currentTask) } },
-                    onComplete: onCompleteCurrentTask
-                )
-                TimelineTaskListView(
-                    tasks: todayTasks,
-                    currentTaskId: currentTask?.id,
-                    onSelect: { onOpenTask?($0) }
-                )
-            }
-            .padding()
-        }
-        .background(Color(.sRGB, red: 0.95, green: 0.95, blue: 0.98, opacity: 1.0))
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    onAddTask?()
-                } label: {
-                    Image(systemName: "plus.circle")
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    DateTimeHeaderView()
+                    DailyProgressView(progress: progress)
+                    CurrentTaskCardView(
+                        task: currentTask,
+                        onTap: { if let currentTask { onOpenTask?(currentTask) } },
+                        onComplete: onCompleteCurrentTask
+                    )
+                    TimelineTaskListView(
+                        tasks: todayTasks,
+                        currentTaskId: currentTask?.id,
+                        onSelect: { onOpenTask?($0) }
+                    )
                 }
+                .padding()
+                .padding(.bottom, 96)
             }
+            .background(Color(.sRGB, red: 0.95, green: 0.95, blue: 0.98, opacity: 1.0))
+
+            // Floating action button
+            Button {
+                showAddTypeSheet = true
+            } label: {
+                Image(systemName: "plus")
+                    .font(.title2.weight(.semibold))
+                    .frame(width: 60, height: 60)
+                    .background(Color.accentColor)
+                    .foregroundStyle(.white)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
+            }
+            .padding(.bottom, 36)
+        }
+        .toolbar {
 #if os(iOS)
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -77,6 +86,66 @@ struct MainDailyView: View {
             }
 #endif
         }
+        .sheet(isPresented: $showAddTypeSheet, onDismiss: {
+            if let type = pendingAddType {
+                onAddTask?(type)
+                pendingAddType = nil
+            }
+        }) {
+            AddTypePickerSheet { type in
+                pendingAddType = type
+                showAddTypeSheet = false
+            }
+        }
+    }
+}
+
+// MARK: - Add Type Picker Sheet
+
+private struct AddTypePickerSheet: View {
+    var onSelect: (ScheduleItemType) -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.3))
+                .frame(width: 36, height: 4)
+                .padding(.top, 12)
+
+            Text("What would you like to add?")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 16) {
+                typeButton(type: .task, icon: "checkmark.circle.fill", color: .blue)
+                typeButton(type: .event, icon: "calendar.circle.fill", color: .orange)
+            }
+            .padding(.horizontal, 24)
+        }
+        .padding(.bottom, 32)
+        .presentationDetents([.height(200)])
+        .presentationDragIndicator(.hidden)
+    }
+
+    @ViewBuilder
+    private func typeButton(type: ScheduleItemType, icon: String, color: Color) -> some View {
+        Button {
+            onSelect(type)
+        } label: {
+            VStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 36))
+                    .foregroundStyle(color)
+                Text(type.displayName)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 18)
+            .background(color.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -115,4 +184,3 @@ struct MainDailyView: View {
 #Preview("Empty state") {
     MainDailyView(progress: .empty)
 }
-

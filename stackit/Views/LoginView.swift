@@ -13,6 +13,7 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isSignUp = false
     @State private var errorMessage: String?
+    @State private var confirmationMessage: String?
     @State private var isLoading = false
 
     var body: some View {
@@ -33,6 +34,21 @@ struct LoginView: View {
 
                 SecureField("Password", text: $password)
                     .textContentType(isSignUp ? .newPassword : .password)
+
+                if let msg = confirmationMessage {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "envelope.badge.checkmark")
+                            .foregroundStyle(.green)
+                        Text(msg)
+                            .font(.caption)
+                            .foregroundStyle(.green)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.green.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
 
                 if let msg = errorMessage {
                     Text(msg)
@@ -62,6 +78,7 @@ struct LoginView: View {
                 Button {
                     isSignUp.toggle()
                     errorMessage = nil
+                    confirmationMessage = nil
                 } label: {
                     Text(isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up")
                         .font(.caption)
@@ -81,6 +98,9 @@ struct LoginView: View {
         do {
             if isSignUp {
                 try await authService.signUp(email: email, password: password)
+                confirmationMessage = "Check your inbox — we sent a confirmation link to \(email). Confirm your email to activate your account."
+                isSignUp = false
+                password = ""
             } else {
                 try await authService.signIn(email: email, password: password)
             }

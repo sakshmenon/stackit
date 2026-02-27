@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Supabase
 
 @main
 struct stackitApp: App {
@@ -14,7 +13,7 @@ struct stackitApp: App {
         WindowGroup {
             ContentView()
                 .onOpenURL { url in
-                    Task { _ = try? await SupabaseClient.shared.auth.handle(url) }
+                    Task { _ = try? await supabase.auth.handle(url) }
                 }
         }
     }

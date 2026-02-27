@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Supabase
 
 struct LoginView: View {
     @EnvironmentObject private var authService: AuthService
@@ -27,9 +26,8 @@ struct LoginView: View {
 
                 TextField("Email", text: $email)
                     .textContentType(.emailAddress)
-                    .autocapitalization(.none)
-                    .keyboardType(.emailAddress)
                     #if os(iOS)
+                    .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     #endif
 
@@ -72,7 +70,7 @@ struct LoginView: View {
             .padding(32)
         }
         .onOpenURL { url in
-            Task { _ = try? await SupabaseClient.shared.auth.handle(url) }
+            Task { _ = try? await supabase.auth.handle(url) }
         }
     }
 

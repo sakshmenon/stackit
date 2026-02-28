@@ -2,16 +2,18 @@
 //  ScheduleStore.swift
 //  stackit
 //
-//  Observable store over the schedule repository. Exposes today’s items, progress, and current task (PROJECT_TIMELINE Day 2).
+//  Observable store over the schedule repository. Exposes today's items, progress, and current task (PROJECT_TIMELINE Day 2).
 //
 
 import Foundation
 import SwiftUI
 
-/// Single source of truth for schedule UI. Uses a repository (in-memory now; Supabase later) and refreshes after mutations.
+/// Single source of truth for schedule UI. Uses a repository (in-memory or Supabase) and refreshes after mutations.
+@MainActor
 final class ScheduleStore: ObservableObject {
     @Published private(set) var todayItems: [ScheduleItem] = []
     @Published private(set) var selectedDate: Date
+    @Published private(set) var isLoading: Bool = false
 
     private let repository: ScheduleItemRepository
     private let calendar: Calendar
@@ -22,7 +24,6 @@ final class ScheduleStore: ObservableObject {
         return DailyProgress(completedCount: completed, totalCount: total)
     }
 
-    /// Suggested current task for the main view (priority then time). Nil when none or all done.
     var currentTask: TaskItem? {
         guard let item = CurrentTaskScheduler.currentTask(from: todayItems) else { return nil }
         return TaskItem(from: item)
@@ -37,17 +38,19 @@ final class ScheduleStore: ObservableObject {
         self.selectedDate = calendar.startOfDay(for: selectedDate)
         self.calendar = calendar
         refresh()
+        Task { await loadRemote(for: self.selectedDate) }
     }
 
-    /// Reload today’s items from the repository and notify observers.
+    /// Reload items from the local cache and notify observers.
     func refresh() {
         todayItems = repository.items(for: selectedDate)
     }
 
-    /// Switch the selected day (e.g. for a future date picker).
+    /// Switch the selected day and reload items.
     func selectDate(_ date: Date) {
         selectedDate = calendar.startOfDay(for: date)
         refresh()
+        Task { await loadRemote(for: selectedDate) }
     }
 
     func add(_ item: ScheduleItem) {
@@ -72,5 +75,23 @@ final class ScheduleStore: ObservableObject {
 
     func item(id: UUID) -> ScheduleItem? {
         repository.item(id: id)
+    }
+
+    // MARK: - Remote sync
+
+    /// Fetches from remote (if the repository supports it) then refreshes the local view.
+    private func loadRemote(for date: Date) async {
+        guard let remote = repository as? RemoteScheduleItemRepository else { return }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            try await remote.fetchItems(for: date)
+            // Only update if the date is still selected (user may have navigated away)
+            if calendar.isDate(date, inSameDayAs: selectedDate) {
+                refresh()
+            }
+        } catch {
+            // Use cached data silently on network failure
+        }
     }
 }

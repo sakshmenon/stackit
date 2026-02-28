@@ -2,12 +2,11 @@
 //  RootContainerView.swift
 //  stackit
 //
-//  Root navigation container: NavigationStack with main daily view and destination routing (Day 1 scaffolding).
+//  Root navigation container: NavigationStack with main daily view and destination routing.
 //
 
 import SwiftUI
 
-/// Holds the main navigation stack and routes to Settings, Task Detail, and Add Task.
 struct RootContainerView: View {
     @EnvironmentObject private var scheduleStore: ScheduleStore
     @State private var navigationPath = [AppRoute]()
@@ -18,9 +17,11 @@ struct RootContainerView: View {
                 currentTask: scheduleStore.currentTask,
                 todayTasks: scheduleStore.todayItems.map(TaskItem.init(from:)),
                 progress: scheduleStore.progress,
+                selectedDate: scheduleStore.selectedDate,
                 onOpenSettings: { navigationPath.append(.settings) },
                 onOpenTask: { navigationPath.append(.taskDetail($0)) },
                 onAddTask: { type in navigationPath.append(.addTask(type)) },
+                onSelectDate: { scheduleStore.selectDate($0) },
                 onCompleteCurrentTask: {
                     guard let t = scheduleStore.currentTask else { return }
                     scheduleStore.setCompleted(id: t.id, completed: true)

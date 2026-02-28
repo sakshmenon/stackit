@@ -52,10 +52,15 @@ struct CurrentTaskCardView: View {
                             .tint(.green)
                         }
                     }
+                    if !task.notes.isEmpty {
+                        Text(task.notes)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color.secondary.opacity(0.1))
+                .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -72,7 +77,7 @@ struct CurrentTaskCardView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.secondary.opacity(0.1))
+                .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }

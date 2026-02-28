@@ -2,39 +2,64 @@
 //  DateTimeHeaderView.swift
 //  stackit
 //
-//  Minimalistic date and time display for the main daily view (PRD FR-12).
+//  Minimalistic date display for the main daily view (PRD FR-12).
+//  Shows the currently selected date; today gets the current time appended.
 //
 
 import SwiftUI
 
-/// Displays current date and time with a clean, low-distraction layout.
 struct DateTimeHeaderView: View {
+    /// The date to display. Defaults to today.
+    let date: Date
+
     @State private var now = Date()
+
+    init(date: Date = Date()) {
+        self.date = date
+    }
 
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateStyle = .medium
+        f.dateStyle = .full
         f.timeZone = .current
         return f
     }()
 
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "h:mm a"
+        f.timeZone = .current
+        return f
+    }()
+
+    private var isToday: Bool {
+        Calendar.current.isDateInToday(date)
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(DateTimeHeaderView.dateFormatter.string(from: now))
-                .font(.title2.weight(.medium))
+        VStack(alignment: .leading, spacing: 2) {
+            Text(Self.dateFormatter.string(from: date))
+                .font(.title3.weight(.semibold))
                 .foregroundStyle(.primary)
+
+            if isToday {
+                Text(Self.timeFormatter.string(from: now))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
+                        now = Date()
+                    }
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .onAppear {
-            now = Date()
-        }
-        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
-            now = Date()
-        }
+        .onAppear { now = Date() }
     }
 }
 
 #Preview {
-    DateTimeHeaderView()
-        .padding()
+    VStack(alignment: .leading, spacing: 20) {
+        DateTimeHeaderView()
+        DateTimeHeaderView(date: Calendar.current.date(byAdding: .day, value: 2, to: Date())!)
+    }
+    .padding()
 }

@@ -2,23 +2,23 @@
 //  TimelineTaskListView.swift
 //  stackit
 //
-//  Vertical timeline list for today’s tasks/events with a line and dots per item.
+//  Vertical timeline list for a day's tasks/events with a line and dots per item.
 //
 
 import SwiftUI
 
-/// Displays today’s tasks as a vertical timeline with a line and dots.
+/// Displays a day's tasks as a vertical timeline with a line and dots.
 /// Completed items appear at the top; upcoming items towards the bottom.
 /// The current task (if any) is visually highlighted.
 struct TimelineTaskListView: View {
     let tasks: [TaskItem]
     let currentTaskId: UUID?
+    var selectedDate: Date = Date()
     var onSelect: ((TaskItem) -> Void)?
 
     private var sortedTasks: [TaskItem] {
         tasks.sorted { lhs, rhs in
             if lhs.isCompleted != rhs.isCompleted {
-                // Completed at the top, upcoming towards the bottom.
                 return lhs.isCompleted && !rhs.isCompleted
             }
             let lhsDate = lhs.scheduledStart ?? .distantPast
@@ -27,16 +27,25 @@ struct TimelineTaskListView: View {
         }
     }
 
+    private var headerLabel: String {
+        if Calendar.current.isDateInToday(selectedDate) {
+            return "Today's schedule"
+        }
+        let f = DateFormatter()
+        f.dateFormat = "EEEE's schedule"
+        return f.string(from: selectedDate)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if sortedTasks.isEmpty {
                 ContentUnavailableView(
-                    "No tasks for today",
+                    "Nothing scheduled",
                     systemImage: "calendar.badge.plus",
-                    description: Text("Add a task with the + button to get started.")
+                    description: Text("Tap + to add a task or event.")
                 )
             } else {
-                Text("Today’s schedule")
+                Text(headerLabel)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
 
@@ -79,14 +88,14 @@ private struct TimelineTaskRowView: View {
             // Timeline rail with dot
             VStack(spacing: 0) {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color(.separator))
                     .frame(width: 2)
                     .opacity(isFirst ? 0 : 1)
                 Circle()
-                    .fill(isCurrent ? Color.accentColor : Color.gray.opacity(0.6))
+                    .fill(isCurrent ? Color.accentColor : Color(.tertiaryLabel))
                     .frame(width: 10, height: 10)
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color(.separator))
                     .frame(width: 2)
                     .opacity(isLast ? 0 : 1)
             }
@@ -97,7 +106,7 @@ private struct TimelineTaskRowView: View {
                 HStack {
                     Text(task.title)
                         .font(.subheadline.weight(isCurrent ? .semibold : .regular))
-                        .foregroundStyle(isCurrent ? Color.primary : Color.primary.opacity(0.9))
+                        .foregroundStyle(.primary)
                         .strikethrough(task.isCompleted, pattern: .solid, color: Color.secondary)
                     Spacer()
                     if let start = task.scheduledStart {
@@ -125,30 +134,28 @@ private struct TimelineTaskRowView: View {
                     }
                 }
             }
-            .padding(8)
+            .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(isCurrent ? Color.accentColor.opacity(0.08) : Color.gray.opacity(0.1))
+            .background(isCurrent ? Color.accentColor.opacity(0.1) : Color(.secondarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .contentShape(Rectangle())
-            .onTapGesture {
-                onTap?()
-            }
+            .onTapGesture { onTap?() }
         }
     }
 
     private func priorityBackground(_ priority: TaskPriority) -> Color {
         switch priority {
-        case .high: return Color.red.opacity(0.12)
+        case .high:   return Color.red.opacity(0.12)
         case .medium: return Color.orange.opacity(0.12)
-        case .low: return Color.green.opacity(0.12)
+        case .low:    return Color.green.opacity(0.12)
         }
     }
 
     private func priorityForeground(_ priority: TaskPriority) -> Color {
         switch priority {
-        case .high: return .red
+        case .high:   return .red
         case .medium: return .orange
-        case .low: return .green
+        case .low:    return .green
         }
     }
 }
@@ -159,32 +166,14 @@ private struct TimelineTaskRowView: View {
     ScrollView {
         TimelineTaskListView(
             tasks: [
-                TaskItem(
-                    title: "Morning deep work",
-                    notes: "",
-                    priority: .high,
-                    scheduledStart: Date().addingTimeInterval(-3600),
-                    isCompleted: true
-                ),
-                TaskItem(
-                    title: "Inbox zero",
-                    notes: "",
-                    priority: .medium,
-                    scheduledStart: Date().addingTimeInterval(-1800),
-                    isCompleted: true
-                ),
-                TaskItem(
-                    title: "Ship Stackit MVP",
-                    notes: "",
-                    priority: .high,
-                    scheduledStart: Date().addingTimeInterval(600)
-                ),
-                TaskItem(
-                    title: "Workout",
-                    notes: "",
-                    priority: .low,
-                    scheduledStart: Date().addingTimeInterval(3600)
-                )
+                TaskItem(title: "Morning deep work", priority: .high,
+                         scheduledStart: Date().addingTimeInterval(-3600), isCompleted: true),
+                TaskItem(title: "Inbox zero", priority: .medium,
+                         scheduledStart: Date().addingTimeInterval(-1800), isCompleted: true),
+                TaskItem(title: "Ship Stackit MVP", priority: .high,
+                         scheduledStart: Date().addingTimeInterval(600)),
+                TaskItem(title: "Workout", priority: .low,
+                         scheduledStart: Date().addingTimeInterval(3600))
             ],
             currentTaskId: nil,
             onSelect: { _ in }
@@ -192,4 +181,3 @@ private struct TimelineTaskRowView: View {
         .padding()
     }
 }
-

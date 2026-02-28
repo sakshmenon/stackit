@@ -19,10 +19,17 @@ final class InMemoryScheduleItemRepository: ScheduleItemRepository {
     }
 
     func items(for date: Date) -> [ScheduleItem] {
-        let startOfDay = Calendar.current.startOfDay(for: date)
+        let cal = Calendar.current
+        let startOfDay = cal.startOfDay(for: date)
         return queue.sync {
             storage.values
-                .filter { Calendar.current.isDate($0.scheduleDate, inSameDayAs: startOfDay) }
+                .filter { item in
+                    // Exact day match
+                    if cal.isDate(item.scheduleDate, inSameDayAs: startOfDay) { return true }
+                    // Recurring: only expand if the item started on or before the requested date
+                    if item.scheduleDate > startOfDay { return false }
+                    return item.recurrenceRule.applies(to: date)
+                }
                 .sorted { ($0.scheduledStart ?? .distantPast) < ($1.scheduledStart ?? .distantPast) }
         }
     }

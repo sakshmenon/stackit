@@ -132,6 +132,22 @@ struct ScheduleItem: Identifiable, Equatable, Hashable, Codable {
     }
 }
 
+// MARK: - Recurrence helpers
+
+extension RecurrenceRule {
+    /// Returns true if this recurrence rule applies to the given date.
+    /// Used by repositories to expand recurring items across dates.
+    func applies(to date: Date) -> Bool {
+        let weekday = Calendar.current.component(.weekday, from: date) // 1=Sun … 7=Sat
+        switch self {
+        case .none:               return false
+        case .daily:              return true
+        case .weekdays:           return (2...6).contains(weekday)
+        case .weekly(let days):   return days.contains(weekday)
+        }
+    }
+}
+
 // MARK: - Helpers
 
 extension ScheduleItem {

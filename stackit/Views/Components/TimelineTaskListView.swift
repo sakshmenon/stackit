@@ -3,29 +3,19 @@
 //  stackit
 //
 //  Vertical timeline list for a day's tasks/events with a line and dots per item.
+//  Task order is determined by the active ScheduleMode in ScheduleStore — this view renders as-is.
 //
 
 import SwiftUI
 
 /// Displays a day's tasks as a vertical timeline with a line and dots.
-/// Completed items appear at the top; upcoming items towards the bottom.
-/// The current task (if any) is visually highlighted.
+/// The ordering of `tasks` is fully controlled by the caller (via ScheduleStore + TaskScheduler).
+/// Completed items are expected at the front of the array (the store guarantees this).
 struct TimelineTaskListView: View {
     let tasks: [TaskItem]
     let currentTaskId: UUID?
     var selectedDate: Date = Date()
     var onSelect: ((TaskItem) -> Void)?
-
-    private var sortedTasks: [TaskItem] {
-        tasks.sorted { lhs, rhs in
-            if lhs.isCompleted != rhs.isCompleted {
-                return lhs.isCompleted && !rhs.isCompleted
-            }
-            let lhsDate = lhs.scheduledStart ?? .distantPast
-            let rhsDate = rhs.scheduledStart ?? .distantPast
-            return lhsDate < rhsDate
-        }
-    }
 
     private var headerLabel: String {
         if Calendar.current.isDateInToday(selectedDate) {
@@ -38,7 +28,7 @@ struct TimelineTaskListView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            if sortedTasks.isEmpty {
+            if tasks.isEmpty {
                 ContentUnavailableView(
                     "Nothing scheduled",
                     systemImage: "calendar.badge.plus",
@@ -50,9 +40,9 @@ struct TimelineTaskListView: View {
                     .foregroundStyle(.secondary)
 
                 VStack(alignment: .leading, spacing: 12) {
-                    ForEach(Array(sortedTasks.enumerated()), id: \.element.id) { index, task in
-                        let isFirst = index == sortedTasks.startIndex
-                        let isLast = index == sortedTasks.index(before: sortedTasks.endIndex)
+                    ForEach(Array(tasks.enumerated()), id: \.element.id) { index, task in
+                        let isFirst = index == tasks.startIndex
+                        let isLast  = index == tasks.index(before: tasks.endIndex)
                         let isCurrent = task.id == currentTaskId
                         TimelineTaskRowView(
                             task: task,

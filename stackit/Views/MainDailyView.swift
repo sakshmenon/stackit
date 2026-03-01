@@ -12,11 +12,13 @@ struct MainDailyView: View {
     var todayTasks: [TaskItem]
     var progress: DailyProgress
     var selectedDate: Date
+    var scheduleMode: ScheduleMode
     var onOpenSettings: (() -> Void)?
     var onOpenTask: ((TaskItem) -> Void)?
     var onAddTask: ((ScheduleItemType) -> Void)?
     var onSelectDate: ((Date) -> Void)?
     var onCompleteCurrentTask: (() -> Void)?
+    var onChangeMode: ((ScheduleMode) -> Void)?
 
     @State private var showAddTypeSheet = false
     @State private var pendingAddType: ScheduleItemType?
@@ -26,21 +28,25 @@ struct MainDailyView: View {
         todayTasks: [TaskItem] = [],
         progress: DailyProgress = .empty,
         selectedDate: Date = Date(),
+        scheduleMode: ScheduleMode = .priority,
         onOpenSettings: (() -> Void)? = nil,
         onOpenTask: ((TaskItem) -> Void)? = nil,
         onAddTask: ((ScheduleItemType) -> Void)? = nil,
         onSelectDate: ((Date) -> Void)? = nil,
-        onCompleteCurrentTask: (() -> Void)? = nil
+        onCompleteCurrentTask: (() -> Void)? = nil,
+        onChangeMode: ((ScheduleMode) -> Void)? = nil
     ) {
         self.currentTask = currentTask
         self.todayTasks = todayTasks
         self.progress = progress
         self.selectedDate = selectedDate
+        self.scheduleMode = scheduleMode
         self.onOpenSettings = onOpenSettings
         self.onOpenTask = onOpenTask
         self.onAddTask = onAddTask
         self.onSelectDate = onSelectDate
         self.onCompleteCurrentTask = onCompleteCurrentTask
+        self.onChangeMode = onChangeMode
     }
 
     var body: some View {
@@ -62,6 +68,11 @@ struct MainDailyView: View {
                         onTap: { if let currentTask { onOpenTask?(currentTask) } },
                         onComplete: onCompleteCurrentTask
                     )
+
+                    // Queue-mode picker (queueing.py modes)
+                    ScheduleModePickerView(selectedMode: scheduleMode) { newMode in
+                        onChangeMode?(newMode)
+                    }
 
                     TimelineTaskListView(
                         tasks: todayTasks,
@@ -181,7 +192,8 @@ private struct AddTypePickerSheet: View {
                      scheduledStart: Date().addingTimeInterval(3600))
         ],
         progress: DailyProgress(completedCount: 1, totalCount: 3),
-        selectedDate: Date()
+        selectedDate: Date(),
+        scheduleMode: .priority
     )
 }
 

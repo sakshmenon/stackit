@@ -15,9 +15,10 @@ struct RootContainerView: View {
         NavigationStack(path: $navigationPath) {
             MainDailyView(
                 currentTask: scheduleStore.currentTask,
-                todayTasks: scheduleStore.todayItems.map(TaskItem.init(from:)),
+                todayTasks: scheduleStore.orderedTodayItems.map(TaskItem.init(from:)),
                 progress: scheduleStore.progress,
                 selectedDate: scheduleStore.selectedDate,
+                scheduleMode: scheduleStore.scheduleMode,
                 onOpenSettings: { navigationPath.append(.settings) },
                 onOpenTask: { navigationPath.append(.taskDetail($0)) },
                 onAddTask: { type in navigationPath.append(.addTask(type)) },
@@ -25,7 +26,8 @@ struct RootContainerView: View {
                 onCompleteCurrentTask: {
                     guard let t = scheduleStore.currentTask else { return }
                     scheduleStore.setCompleted(id: t.id, completed: true)
-                }
+                },
+                onChangeMode: { scheduleStore.scheduleMode = $0 }
             )
             .navigationDestination(for: AppRoute.self) { route in
                 destinationView(for: route)

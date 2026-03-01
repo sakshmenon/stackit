@@ -12,8 +12,14 @@ import SwiftUI
 @MainActor
 final class ScheduleStore: ObservableObject {
     @Published private(set) var todayItems: [ScheduleItem] = []
+    @Published private(set) var orderedTodayItems: [ScheduleItem] = []
     @Published private(set) var selectedDate: Date
     @Published private(set) var isLoading: Bool = false
+
+    /// Active scheduling mode (persisted so the picker survives foreground/background cycles).
+    @Published var scheduleMode: ScheduleMode = .priority {
+        didSet { applyMode() }
+    }
 
     private let repository: ScheduleItemRepository
     private let calendar: Calendar
@@ -24,8 +30,9 @@ final class ScheduleStore: ObservableObject {
         return DailyProgress(completedCount: completed, totalCount: total)
     }
 
+    /// Current task derived from the active schedule mode's ordering.
     var currentTask: TaskItem? {
-        guard let item = CurrentTaskScheduler.currentTask(from: todayItems) else { return nil }
+        guard let item = TaskScheduler.currentTask(from: orderedTodayItems) else { return nil }
         return TaskItem(from: item)
     }
 
@@ -39,21 +46,21 @@ final class ScheduleStore: ObservableObject {
         self.calendar = calendar
         refresh()
         Task { await loadRemote(for: self.selectedDate) }
-        // #region agent log
-        let logPath = "/Users/sakshmenon/Desktop/stackit/.cursor/debug.log"
-        let repoType = String(describing: type(of: repository))
-        let entry = "{\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000)),\"location\":\"ScheduleStore.swift:init\",\"message\":\"ScheduleStore initialised\",\"data\":{\"repoType\":\"\(repoType)\"},\"hypothesisId\":\"H-A\",\"runId\":\"post-fix\"}\n"
-        if let data = entry.data(using: .utf8) {
-            if FileManager.default.fileExists(atPath: logPath),
-               let fh = FileHandle(forWritingAtPath: logPath) { fh.seekToEndOfFile(); fh.write(data); fh.closeFile() }
-            else { try? data.write(to: URL(fileURLWithPath: logPath)) }
-        }
-        // #endregion agent log
     }
 
-    /// Reload items from the local cache and notify observers.
+    /// Reload items from the local cache, then apply the current scheduling mode.
     func refresh() {
         todayItems = repository.items(for: selectedDate)
+        applyMode()
+    }
+
+    /// Reorder `orderedTodayItems`: completed items first (visual progress),
+    /// then incomplete items sorted by the active `ScheduleMode`.
+    private func applyMode() {
+        let completed = todayItems.filter(\.isCompleted)
+        let incomplete = todayItems.filter { !$0.isCompleted }
+        let orderedIncomplete = TaskScheduler.apply(mode: scheduleMode, to: incomplete)
+        orderedTodayItems = completed + orderedIncomplete
     }
 
     /// Switch the selected day and reload items.

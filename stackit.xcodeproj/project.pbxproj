@@ -34,6 +34,7 @@
 		9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF42F4F5210003ED567 /* AuthService.swift */; };
 		9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20EEF52F4F5210003ED567 /* LoginView.swift */; };
 		9D581FC62F50FCE600758D14 /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D581FC52F50FCE600758D14 /* SupabaseConfig.swift */; };
+		9DC5FCF42F5281E600AAA478 /* WeekStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC5FCF32F5281E600AAA478 /* WeekStripView.swift */; };
 		9DE9480A2F50F61F009F577D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9D20EEF12F4F5210003ED567 /* Supabase */; };
 		9DE9480C2F50F651009F577D /* Supabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9480B2F50F651009F577D /* Supabase.swift */; };
 		9DE9736D2F501F0E0065FADE /* TimelineTaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */; };
@@ -88,6 +89,7 @@
 		9D20EEF42F4F5210003ED567 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		9D20EEF52F4F5210003ED567 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		9D581FC52F50FCE600758D14 /* SupabaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
+		9DC5FCF32F5281E600AAA478 /* WeekStripView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekStripView.swift; sourceTree = "<group>"; };
 		9DE9480B2F50F651009F577D /* Supabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
 		9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineTaskListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -208,6 +210,7 @@
 				9D20EEA12F4F5210003ED567 /* DateTimeHeaderView.swift */,
 				9D20EEA22F4F5210003ED567 /* DailyProgressView.swift */,
 				9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */,
+				9DC5FCF32F5281E600AAA478 /* WeekStripView.swift */,
 				9D20EEA32F4F5210003ED567 /* CurrentTaskCardView.swift */,
 			);
 			path = Components;
@@ -395,6 +398,7 @@
 				9D20EED22F4F5210003ED567 /* CurrentTaskScheduler.swift in Sources */,
 				9D20EED32F4F5210003ED567 /* ScheduleStore.swift in Sources */,
 				9D20EEF72F4F5210003ED567 /* SupabaseClient+Shared.swift in Sources */,
+				9DC5FCF42F5281E600AAA478 /* WeekStripView.swift in Sources */,
 				9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */,
 				9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */,
 			);

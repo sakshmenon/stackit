@@ -165,24 +165,23 @@ private struct AddTypePickerSheet: View {
 // MARK: - Previews
 
 #Preview("With task and progress") {
-    let today = Date()
     MainDailyView(
         currentTask: TaskItem(
             title: "Ship Stackit MVP",
             notes: "Final pass on main screen",
             priority: .high,
-            scheduledStart: today
+            scheduledStart: Date()
         ),
         todayTasks: [
             TaskItem(title: "Morning deep work", priority: .high,
-                     scheduledStart: today.addingTimeInterval(-3600), isCompleted: true),
+                     scheduledStart: Date().addingTimeInterval(-3600), isCompleted: true),
             TaskItem(title: "Ship Stackit MVP", priority: .high,
-                     scheduledStart: today.addingTimeInterval(600)),
+                     scheduledStart: Date().addingTimeInterval(600)),
             TaskItem(title: "Workout", priority: .low,
-                     scheduledStart: today.addingTimeInterval(3600))
+                     scheduledStart: Date().addingTimeInterval(3600))
         ],
         progress: DailyProgress(completedCount: 1, totalCount: 3),
-        selectedDate: today
+        selectedDate: Date()
     )
 }
 

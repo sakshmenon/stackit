@@ -10,13 +10,6 @@
 import Foundation
 import Supabase
 
-// MARK: - Remote protocol
-
-/// Optional async extension for repositories that can sync from a remote source.
-protocol RemoteScheduleItemRepository: ScheduleItemRepository {
-    func fetchItems(for date: Date) async throws
-}
-
 // MARK: - Row DTO (database ↔ app model)
 
 private struct ScheduleItemRow: Decodable {

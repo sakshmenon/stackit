@@ -27,3 +27,10 @@ protocol ScheduleItemRepository {
     /// Mark item as completed (or uncompleted) and set completedAt.
     func setCompleted(id: UUID, completed: Bool, at date: Date)
 }
+
+/// Optional async extension for repositories that can sync from a remote source.
+/// Conforming types (e.g. SupabaseScheduleItemRepository) populate a local cache
+/// from the network; sync protocol methods always read from that cache.
+protocol RemoteScheduleItemRepository: ScheduleItemRepository {
+    func fetchItems(for date: Date) async throws
+}

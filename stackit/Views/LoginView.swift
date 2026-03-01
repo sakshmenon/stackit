@@ -19,11 +19,8 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Text("Stackit")
+                Text("Dispatch")
                     .font(.largeTitle.weight(.bold))
-                Text("Sign in or create an account")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
 
                 TextField("Email", text: $email)
                     .textContentType(.emailAddress)
@@ -72,7 +69,9 @@ struct LoginView: View {
                 .padding()
                 .background(Color.accentColor)
                 .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .frame(width: 150)
+                .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
                 .disabled(email.isEmpty || password.isEmpty || isLoading)
 
                 Button {

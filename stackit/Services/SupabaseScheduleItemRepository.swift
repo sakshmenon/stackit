@@ -178,7 +178,7 @@ final class SupabaseScheduleItemRepository: RemoteScheduleItemRepository {
         var owned = item
         owned.userId = userId
         lock.lock(); cache[owned.id] = owned; lock.unlock()
-        Task { try? await insertToSupabase(owned) }
+        Task { [owned] in try? await insertToSupabase(owned) }
     }
 
     func update(_ item: ScheduleItem) {

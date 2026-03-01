@@ -74,13 +74,20 @@ private struct ModeChip: View {
 
 // MARK: - Previews
 
-#Preview {
-    @Previewable @State var mode = ScheduleMode.priority
-    return VStack(spacing: 20) {
-        ScheduleModePickerView(selectedMode: mode) { mode = $0 }
-        Text("Active: \(mode.displayName) — \(mode.subtitle)")
-            .font(.caption)
-            .foregroundStyle(.secondary)
+private struct ScheduleModePickerPreview: View {
+    @State private var mode = ScheduleMode.priority
+
+    var body: some View {
+        VStack(spacing: 20) {
+            ScheduleModePickerView(selectedMode: mode) { mode = $0 }
+            Text("Active: \(mode.displayName) — \(mode.subtitle)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
     }
-    .padding()
+}
+
+#Preview {
+    ScheduleModePickerPreview()
 }

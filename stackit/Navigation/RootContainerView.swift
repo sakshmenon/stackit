@@ -9,7 +9,15 @@ import SwiftUI
 
 struct RootContainerView: View {
     @EnvironmentObject private var scheduleStore: ScheduleStore
+    @EnvironmentObject private var burstScheduler: BurstScheduler
     @State private var navigationPath = [AppRoute]()
+
+    /// Title of the currently active burst task, used in the alert message.
+    private var activeTaskTitle: String {
+        guard let id = burstScheduler.activeTaskId,
+              let item = scheduleStore.item(id: id) else { return "the current task" }
+        return "\(item.title)"
+    }
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -33,6 +41,17 @@ struct RootContainerView: View {
                 destinationView(for: route)
             }
         }
+        // Burst-time alert — mirrors driver.py input("Task X completed? (y/n)")
+        .alert("Time's up!", isPresented: $burstScheduler.showBurstAlert) {
+            Button("Done ✓") {
+                burstScheduler.advance(completed: true, store: scheduleStore)
+            }
+            Button("Not yet") {
+                burstScheduler.advance(completed: false, store: scheduleStore)
+            }
+        } message: {
+            Text("Did you finish \(activeTaskTitle)?")
+        }
     }
 
     @ViewBuilder
@@ -55,4 +74,5 @@ struct RootContainerView: View {
 #Preview {
     RootContainerView()
         .environmentObject(ScheduleStore(repository: InMemoryScheduleItemRepository()))
+        .environmentObject(BurstScheduler())
 }

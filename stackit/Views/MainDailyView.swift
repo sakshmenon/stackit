@@ -69,6 +69,9 @@ struct MainDailyView: View {
                         onComplete: onCompleteCurrentTask
                     )
 
+                    // Burst scheduler status / start card (preemptive & non-preemptive)
+                    BurstTimerStatusView()
+
                     // Queue-mode picker (queueing.py modes)
                     ScheduleModePickerView(selectedMode: scheduleMode) { newMode in
                         onChangeMode?(newMode)

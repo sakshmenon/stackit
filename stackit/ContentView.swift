@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var authService = AuthService() 
+    @StateObject private var authService = AuthService()
     @StateObject private var scheduleStore: ScheduleStore = {
         let repo = InMemoryScheduleItemRepository()
         return ScheduleStore(repository: repo)
     }()
+    @StateObject private var burstScheduler = BurstScheduler()
 
     var body: some View {
         Group {
@@ -25,6 +26,7 @@ struct ContentView: View {
         }
         .environmentObject(authService)
         .environmentObject(scheduleStore)
+        .environmentObject(burstScheduler)
         .task {
             await authService.restoreSession()
         }

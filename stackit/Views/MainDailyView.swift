@@ -143,7 +143,7 @@ private struct AddTypePickerSheet: View {
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 16) {
-                typeButton(type: .task, icon: "checkmark.circle.fill", color: .blue)
+                typeButton(type: .task, icon: "checkmark.circle.fill", color: .green)
                 typeButton(type: .event, icon: "calendar.circle.fill", color: .orange)
             }
             .padding(.horizontal, 24)

@@ -21,6 +21,13 @@ final class ScheduleStore: ObservableObject {
         didSet { applyMode() }
     }
 
+    /// Explicit task ordering set by BurstScheduler while it is active.
+    /// When non-nil, applyMode() respects this order instead of re-sorting (fixes H-A, H-B).
+    /// nil = normal sort via TaskScheduler + ScheduleMode.
+    var schedulerQueueIds: [UUID]? = nil {
+        didSet { applyMode() }
+    }
+
     private let repository: ScheduleItemRepository
     private let calendar: Calendar
 
@@ -59,8 +66,23 @@ final class ScheduleStore: ObservableObject {
     private func applyMode() {
         let completed = todayItems.filter(\.isCompleted)
         let incomplete = todayItems.filter { !$0.isCompleted }
-        let orderedIncomplete = TaskScheduler.apply(mode: scheduleMode, to: incomplete)
-        orderedTodayItems = completed + orderedIncomplete
+
+        if let pinnedId = schedulerQueueIds?.first {
+            // Scheduler running: pin only the active task at position 0;
+            // sort all other incomplete tasks by the selected queue mode so
+            // the mode picker still has full effect on non-active tasks.
+            let byId = Dictionary(uniqueKeysWithValues: incomplete.map { ($0.id, $0) })
+            if let pinned = byId[pinnedId] {
+                let rest = TaskScheduler.apply(mode: scheduleMode,
+                                               to: incomplete.filter { $0.id != pinnedId })
+                orderedTodayItems = completed + [pinned] + rest
+            } else {
+                // Active task was already completed or removed; fall back to normal sort.
+                orderedTodayItems = completed + TaskScheduler.apply(mode: scheduleMode, to: incomplete)
+            }
+        } else {
+            orderedTodayItems = completed + TaskScheduler.apply(mode: scheduleMode, to: incomplete)
+        }
     }
 
     /// Switch the selected day and reload items.

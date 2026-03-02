@@ -12,6 +12,9 @@ struct SettingsView: View {
     @EnvironmentObject private var authService: AuthService
     @EnvironmentObject private var burstScheduler: BurstScheduler
 
+    /// Available burst-time presets in minutes. Includes 1 min for quick testing.
+    static let burstTimePresets = [1, 5, 10, 15, 20, 25, 30, 45, 60, 90, 120]
+
     var body: some View {
         List {
             Section("Account") {
@@ -33,13 +36,13 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.navigationLink)
 
-                if burstScheduler.schedulerMode != .off {
-                    Stepper(
-                        "Burst time: \(burstScheduler.burstTimeMinutes) min",
-                        value: $burstScheduler.burstTimeMinutes,
-                        in: 5...120,
-                        step: 5
-                    )
+                // Burst time is only relevant for preemptive mode (non-preemptive has no timer).
+                if burstScheduler.schedulerMode == .preemptive {
+                    Picker("Burst time", selection: $burstScheduler.burstTimeMinutes) {
+                        ForEach(Self.burstTimePresets, id: \.self) { min in
+                            Text("\(min) min").tag(min)
+                        }
+                    }
                 }
             } header: {
                 Text("Scheduler")

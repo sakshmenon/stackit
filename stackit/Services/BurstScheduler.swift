@@ -44,30 +44,48 @@ final class BurstScheduler: ObservableObject {
     private var queue: [UUID] = []
     private var timerTask: Task<Void, Never>?
 
+    /// Weak reference to the store, set at start() so stop() can release the queue override.
+    private weak var store: ScheduleStore?
+
     // MARK: - Init
 
     init() {
         let raw   = UserDefaults.standard.string(forKey: Keys.mode) ?? ""
         let saved = UserDefaults.standard.integer(forKey: Keys.burst)
-        self.schedulerMode   = BurstSchedulerMode(rawValue: raw) ?? .off
-        self.burstTimeMinutes = saved > 0 ? saved : 30
+        // Default to .nonPreemptive on first launch (H-D fix).
+        self.schedulerMode = BurstSchedulerMode(rawValue: raw) ?? .nonPreemptive
+        // Snap to nearest preset so out-of-range stored values don't break the Picker binding.
+        let presets = SettingsView.burstTimePresets
+        if saved > 0, let snapped = presets.min(by: { abs($0 - saved) < abs($1 - saved) }) {
+            self.burstTimeMinutes = snapped
+        } else {
+            self.burstTimeMinutes = 30
+        }
     }
 
     // MARK: - Control
 
     /// Start the scheduler with a pre-ordered list of items (mirrors: current_task = queue.pop(0)).
     /// Only incomplete tasks are enqueued; events are ignored.
-    func start(orderedItems: [ScheduleItem]) {
+    /// Fix H-A/H-B: accepts the store so it can pin the scheduler's queue order.
+    /// Fix H-C: only starts the countdown timer for preemptive mode.
+    func start(orderedItems: [ScheduleItem], store: ScheduleStore) {
         guard schedulerMode != .off else { return }
         stop()
+        self.store = store
         queue = orderedItems
             .filter { !$0.isCompleted && $0.itemType == .task }
             .map(\.id)
         guard !queue.isEmpty else { return }
         // current_task = queue.pop(0)
         activeTaskId = queue.removeFirst()
+        // Pin the scheduler's order in the store so queue mode changes can't displace the active task
+        store.schedulerQueueIds = [activeTaskId!] + queue
         isRunning = true
-        beginCountdown()
+        // Only preemptive uses a burst timer
+        if schedulerMode == .preemptive {
+            beginCountdown()
+        }
     }
 
     /// Stop the scheduler and reset all state.
@@ -79,6 +97,9 @@ final class BurstScheduler: ObservableObject {
         activeTaskId = nil
         queue        = []
         showBurstAlert = false
+        // Release the queue override so the store returns to normal sorting
+        store?.schedulerQueueIds = nil
+        store = nil
     }
 
     /// Called when the user answers the burst-time alert.
@@ -98,21 +119,25 @@ final class BurstScheduler: ObservableObject {
         guard let taskId = activeTaskId else { stop(); return }
 
         if completed {
-            store.setCompleted(id: taskId, completed: true)
+            // Advance queue first, then update the store's visual order, then mark complete.
+            // This ensures the single refresh() triggered by setCompleted() sees the correct order.
             popNext()
+            store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
+            store.setCompleted(id: taskId, completed: true)
         } else if schedulerMode == .preemptive {
             // queue.append(current_task); current_task = queue.pop(0)
             queue.append(taskId)
             popNext()
-        } else {
-            // Non-preemptive: pass — stay on same task, reset burst timer
-            beginCountdown()
+            // Push the updated queue order to the store so the task moves to the bottom visually.
+            store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
         }
+        // Non-preemptive has no timer, so this function is only called with completed: true
+        // from the "Done ✓" button in BurstTimerStatusView.
     }
 
     // MARK: - Private helpers
 
-    /// Pop the next task from the queue and start its countdown, or stop if none remain.
+    /// Pop the next task from the queue and start its countdown (preemptive only), or stop if none remain.
     private func popNext() {
         guard !queue.isEmpty else {
             stop()
@@ -120,7 +145,10 @@ final class BurstScheduler: ObservableObject {
         }
         // current_task = queue.pop(0)
         activeTaskId = queue.removeFirst()
-        beginCountdown()
+        // Fix H-C: only preemptive uses the burst timer
+        if schedulerMode == .preemptive {
+            beginCountdown()
+        }
     }
 
     /// Start a per-second countdown for `burstTimeMinutes`. Fires `showBurstAlert` at zero.

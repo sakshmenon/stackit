@@ -19,31 +19,38 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Text("Dispatch")
+                Text("Stackit")
                     .font(.largeTitle.weight(.bold))
+                    .padding(.bottom, 8)
 
-                TextField("Email", text: $email)
-                    .textContentType(.emailAddress)
-                    #if os(iOS)
-                    .keyboardType(.emailAddress)
-                    .textInputAutocapitalization(.never)
-                    #endif
+                VStack(spacing: 14) {
+                    OutlinedField {
+                        TextField("Email", text: $email)
+                            .textContentType(.emailAddress)
+                            #if os(iOS)
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            #endif
+                    }
 
-                SecureField("Password", text: $password)
-                    .textContentType(isSignUp ? .newPassword : .password)
+                    OutlinedField {
+                        SecureField("Password", text: $password)
+                            .textContentType(isSignUp ? .newPassword : .password)
+                    }
+                }
 
                 if let msg = confirmationMessage {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "envelope.badge.checkmark")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.accentColor)
                         Text(msg)
                             .font(.caption)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.accentColor)
                             .multilineTextAlignment(.leading)
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.green.opacity(0.1))
+                    .background(Color.accentColor.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
 
@@ -57,21 +64,22 @@ struct LoginView: View {
                 Button {
                     Task { await submit() }
                 } label: {
-                    if isLoading {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .tint(.white)
-                    } else {
-                        Text(isSignUp ? "Sign up" : "Sign in")
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .tint(.white)
+                        } else {
+                            Text(isSignUp ? "Sign up" : "Sign in")
+                                .fontWeight(.semibold)
+                        }
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Color.accentColor)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentColor)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: 150)
-                .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
                 .disabled(email.isEmpty || password.isEmpty || isLoading)
 
                 Button {
@@ -81,6 +89,7 @@ struct LoginView: View {
                 } label: {
                     Text(isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up")
                         .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
             .padding(32)
@@ -106,6 +115,25 @@ struct LoginView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+}
+
+// MARK: - Outlined Field Wrapper
+
+/// A simple outlined container for text inputs.
+private struct OutlinedField<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        content
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(.background)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.secondary.opacity(0.35), lineWidth: 1)
+            }
     }
 }
 

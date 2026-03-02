@@ -2,8 +2,8 @@
 //  DateTimeHeaderView.swift
 //  stackit
 //
-//  Minimalistic date display for the main daily view (PRD FR-12).
-//  Shows the currently selected date; today gets the current time appended.
+//  Date header for the main daily view (PRD FR-12).
+//  Shows month + day for the selected date; today gets a live "time remaining" countdown.
 //
 
 import SwiftUI
@@ -14,27 +14,51 @@ struct DateTimeHeaderView: View {
 
     @State private var now = Date()
 
+    private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+
     init(date: Date = Date()) {
         self.date = date
     }
 
+    // MARK: - Formatters
+
+    /// "February 25" — locale-aware month + day, no year, no weekday.
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateStyle = .full
+        f.setLocalizedDateFormatFromTemplate("MMMMd")
         f.timeZone = .current
         return f
     }()
 
-    private static let timeFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "h:mm a"
-        f.timeZone = .current
-        return f
-    }()
+    // MARK: - Helpers
 
     private var isToday: Bool {
         Calendar.current.isDateInToday(date)
     }
+
+    /// Hours and minutes remaining until midnight.
+    private var timeUntilMidnight: (hours: Int, minutes: Int) {
+        let calendar = Calendar.current
+        guard let midnight = calendar.nextDate(
+            after: now,
+            matching: DateComponents(hour: 0, minute: 0, second: 0),
+            matchingPolicy: .nextTime
+        ) else { return (0, 0) }
+
+        let remaining = max(0, Int(midnight.timeIntervalSince(now)))
+        return (remaining / 3600, (remaining % 3600) / 60)
+    }
+
+    private var countdownText: String {
+        let (hours, minutes) = timeUntilMidnight
+        if hours > 0 {
+            return "\(hours)h \(minutes)m left"
+        } else {
+            return "\(minutes)m left"
+        }
+    }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -43,12 +67,10 @@ struct DateTimeHeaderView: View {
                 .foregroundStyle(.primary)
 
             if isToday {
-                Text(Self.timeFormatter.string(from: now))
+                Text(countdownText)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                    .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
-                        now = Date()
-                    }
+                    .onReceive(timer) { _ in now = Date() }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

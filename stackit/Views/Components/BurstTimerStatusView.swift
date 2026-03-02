@@ -45,7 +45,7 @@ struct BurstTimerStatusView: View {
             Spacer()
 
             Button("Start") {
-                burstScheduler.start(orderedItems: scheduleStore.orderedTodayItems)
+                burstScheduler.start(orderedItems: scheduleStore.orderedTodayItems, store: scheduleStore)
             }
             .buttonStyle(.borderedProminent)
             .tint(accentColor)
@@ -60,10 +60,11 @@ struct BurstTimerStatusView: View {
         )
     }
 
-    // MARK: - Running card (timer active)
+    // MARK: - Running card (preemptive: shows countdown; non-preemptive: shows Done button)
 
     @ViewBuilder private var runningCard: some View {
         VStack(alignment: .leading, spacing: 10) {
+            // Header row
             HStack {
                 Image(systemName: burstScheduler.schedulerMode.systemImage)
                     .font(.caption.weight(.semibold))
@@ -78,6 +79,7 @@ struct BurstTimerStatusView: View {
                     .buttonStyle(.plain)
             }
 
+            // Active task title
             if let taskId = burstScheduler.activeTaskId,
                let task = scheduleStore.item(id: taskId) {
                 Text(task.title)
@@ -85,18 +87,29 @@ struct BurstTimerStatusView: View {
                     .lineLimit(1)
             }
 
-            HStack(spacing: 8) {
-                ProgressView(
-                    value: Double(burstScheduler.timeRemainingSeconds),
-                    total: Double(burstScheduler.burstTimeMinutes * 60)
-                )
-                .tint(accentColor)
-                .animation(.linear(duration: 1), value: burstScheduler.timeRemainingSeconds)
+            // Preemptive: burst countdown bar
+            // Non-preemptive: manual "Done" button (no timer)
+            if burstScheduler.schedulerMode == .preemptive {
+                HStack(spacing: 8) {
+                    ProgressView(
+                        value: Double(burstScheduler.timeRemainingSeconds),
+                        total: Double(burstScheduler.burstTimeMinutes * 60)
+                    )
+                    .tint(accentColor)
+                    .animation(.linear(duration: 1), value: burstScheduler.timeRemainingSeconds)
 
-                Text(formattedTime(burstScheduler.timeRemainingSeconds))
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                    .frame(width: 44, alignment: .trailing)
+                    Text(formattedTime(burstScheduler.timeRemainingSeconds))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                        .frame(width: 44, alignment: .trailing)
+                }
+            } else {
+                Button("Done ✓") {
+                    burstScheduler.advance(completed: true, store: scheduleStore)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(accentColor)
+                .controlSize(.small)
             }
         }
         .padding(14)

@@ -19,15 +19,23 @@ struct ScheduleModePickerView: View {
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(ScheduleMode.allCases) { mode in
-                        ModeChip(mode: mode, isSelected: mode == selectedMode) {
-                            onSelect(mode)
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(ScheduleMode.allCases) { mode in
+                            ModeChip(mode: mode, isSelected: mode == selectedMode) {
+                                onSelect(mode)
+                            }
+                            .id(mode)
                         }
                     }
+                    .padding(.horizontal, 1)   // prevent clip on shadows
                 }
-                .padding(.horizontal, 1)   // prevent clip on shadows
+                .onChange(of: selectedMode) { newMode in
+                    withAnimation(.easeInOut(duration: 0.4)) {
+                        proxy.scrollTo(newMode, anchor: .center)
+                    }
+                }
             }
         }
     }
@@ -57,6 +65,8 @@ private struct ModeChip: View {
                 Capsule()
                     .strokeBorder(isSelected ? Color.clear : Color.secondary.opacity(0.3), lineWidth: 1)
             )
+            // Animate fill and border transitions when selection changes
+            .animation(.spring(response: 0.28, dampingFraction: 0.72), value: isSelected)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(mode.displayName): \(mode.subtitle)")

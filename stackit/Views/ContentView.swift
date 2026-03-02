@@ -12,17 +12,24 @@ struct ContentView: View {
     @StateObject private var authService = AuthService()
 
     var body: some View {
-        Group {
+        ZStack {
             switch authService.state {
             case .signedOut:
                 LoginView()
                     .environmentObject(authService)
+                    .transition(.opacity)
+                    .zIndex(0)
 
             case .signedIn(let userId):
                 AuthenticatedRootView(userId: userId)
                     .environmentObject(authService)
+                    // Simple fade for the container; MainDailyView's per-component
+                    // animations own all the directional motion.
+                    .transition(.opacity)
+                    .zIndex(1)
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: authService.state)
         .onAppear {
             Task { await authService.restoreSession() }
         }

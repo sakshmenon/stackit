@@ -33,9 +33,15 @@ struct RootContainerView: View {
                 onSelectDate: { scheduleStore.selectDate($0) },
                 onCompleteCurrentTask: {
                     guard let t = scheduleStore.currentTask else { return }
-                    scheduleStore.setCompleted(id: t.id, completed: true)
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
+                        scheduleStore.setCompleted(id: t.id, completed: true)
+                    }
                 },
-                onChangeMode: { scheduleStore.scheduleMode = $0 }
+                onChangeMode: { newMode in
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
+                        scheduleStore.scheduleMode = newMode
+                    }
+                }
             )
             .navigationDestination(for: AppRoute.self) { route in
                 destinationView(for: route)

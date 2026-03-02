@@ -8,9 +8,7 @@
 import Foundation
 
 /// Time-based scheduling behaviour — orthogonal to queue ordering (ScheduleMode).
-/// `.off` disables the burst timer entirely.
 enum BurstSchedulerMode: String, CaseIterable, Identifiable, Codable {
-    case off           = "off"
     case preemptive    = "preemptive"
     case nonPreemptive = "non_preemptive"
 
@@ -18,16 +16,14 @@ enum BurstSchedulerMode: String, CaseIterable, Identifiable, Codable {
 
     var displayName: String {
         switch self {
-        case .off:           return "Off"
         case .preemptive:    return "Preemptive"
         case .nonPreemptive: return "Non-Preemptive"
         }
     }
 
-    /// Short description shown in settings and the picker.
+    /// Short description shown in settings and the card footer.
     var subtitle: String {
         switch self {
-        case .off:           return "No time-based scheduling"
         case .preemptive:    return "Unfinished tasks move to back of queue"
         case .nonPreemptive: return "Stay on task until you confirm it done"
         }
@@ -35,7 +31,6 @@ enum BurstSchedulerMode: String, CaseIterable, Identifiable, Codable {
 
     var systemImage: String {
         switch self {
-        case .off:           return "pause.circle"
         case .preemptive:    return "arrow.counterclockwise.circle"
         case .nonPreemptive: return "lock.circle"
         }

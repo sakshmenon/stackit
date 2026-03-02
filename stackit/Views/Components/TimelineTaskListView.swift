@@ -41,8 +41,8 @@ struct TimelineTaskListView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     ForEach(Array(tasks.enumerated()), id: \.element.id) { index, task in
-                        let isFirst = index == tasks.startIndex
-                        let isLast  = index == tasks.index(before: tasks.endIndex)
+                        let isFirst   = index == tasks.startIndex
+                        let isLast    = index == tasks.index(before: tasks.endIndex)
                         let isCurrent = task.id == currentTaskId
                         TimelineTaskRowView(
                             task: task,
@@ -50,6 +50,18 @@ struct TimelineTaskListView: View {
                             isFirst: isFirst,
                             isLast: isLast,
                             onTap: { onSelect?(task) }
+                        )
+                        // Rows slide in from above on insert and down on removal.
+                        .transition(.asymmetric(
+                            insertion: .opacity.combined(with: .offset(y: -10)),
+                            removal:   .opacity.combined(with: .offset(y:  10))
+                        ))
+                        // Stagger each row's response so they cascade top-to-bottom
+                        // when the whole list reorders (mode change, scheduler advance).
+                        .animation(
+                            .spring(response: 0.42, dampingFraction: 0.82)
+                                .delay(Double(index) * 0.04),
+                            value: tasks.map(\.id)
                         )
                     }
                 }
@@ -130,6 +142,9 @@ private struct TimelineTaskRowView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .contentShape(Rectangle())
             .onTapGesture { onTap?() }
+            // Smoothly animate the row's visual state when a task is marked complete
+            .animation(.spring(response: 0.35, dampingFraction: 0.80), value: task.isCompleted)
+            .animation(.spring(response: 0.35, dampingFraction: 0.80), value: isCurrent)
         }
     }
 

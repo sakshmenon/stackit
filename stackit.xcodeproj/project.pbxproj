@@ -40,10 +40,12 @@
 		9DC5FCFC2F54199700AAA478 /* ScheduleModePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC5FCFB2F54199700AAA478 /* ScheduleModePickerView.swift */; };
 		9DC5FCFE2F54367400AAA478 /* BurstScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC5FCFD2F54367400AAA478 /* BurstScheduler.swift */; };
 		9DC5FD002F54367D00AAA478 /* BurstSchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC5FCFF2F54367D00AAA478 /* BurstSchedulerMode.swift */; };
-		9DC5FD022F5436A500AAA478 /* BurstTimerStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC5FD012F5436A500AAA478 /* BurstTimerStatusView.swift */; };
 		9DE9480A2F50F61F009F577D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9D20EEF12F4F5210003ED567 /* Supabase */; };
 		9DE9480C2F50F651009F577D /* Supabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9480B2F50F651009F577D /* Supabase.swift */; };
 		9DE9736D2F501F0E0065FADE /* TimelineTaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */; };
+		AA11BB012F6A000100DEMO01 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB002F6A000100DEMO01 /* ConfettiView.swift */; };
+		AA11BB032F6A000100DEMO02 /* DemoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB022F6A000100DEMO02 /* DemoCoordinator.swift */; };
+		AA11BB052F6A000100DEMO03 /* DemoRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB042F6A000100DEMO03 /* DemoRootView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,9 +103,11 @@
 		9DC5FCFB2F54199700AAA478 /* ScheduleModePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleModePickerView.swift; sourceTree = "<group>"; };
 		9DC5FCFD2F54367400AAA478 /* BurstScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstScheduler.swift; sourceTree = "<group>"; };
 		9DC5FCFF2F54367D00AAA478 /* BurstSchedulerMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstSchedulerMode.swift; sourceTree = "<group>"; };
-		9DC5FD012F5436A500AAA478 /* BurstTimerStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstTimerStatusView.swift; sourceTree = "<group>"; };
 		9DE9480B2F50F651009F577D /* Supabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
 		9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineTaskListView.swift; sourceTree = "<group>"; };
+		AA11BB002F6A000100DEMO01 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		AA11BB022F6A000100DEMO02 /* DemoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCoordinator.swift; sourceTree = "<group>"; };
+		AA11BB042F6A000100DEMO03 /* DemoRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoRootView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +215,7 @@
 				9D20EEAA2F4F5210003ED567 /* SettingsView.swift */,
 				9D20EEAB2F4F5210003ED567 /* TaskDetailView.swift */,
 				9D20EEAC2F4F5210003ED567 /* AddTaskPlaceholderView.swift */,
+				AA11BB042F6A000100DEMO03 /* DemoRootView.swift */,
 				9D20EEA72F4F5210003ED567 /* Components */,
 			);
 			path = Views;
@@ -221,11 +226,11 @@
 			children = (
 				9D20EEA12F4F5210003ED567 /* DateTimeHeaderView.swift */,
 				9D20EEA22F4F5210003ED567 /* DailyProgressView.swift */,
-				9DC5FD012F5436A500AAA478 /* BurstTimerStatusView.swift */,
 				9DC5FCFB2F54199700AAA478 /* ScheduleModePickerView.swift */,
 				9DE9736C2F501F0E0065FADE /* TimelineTaskListView.swift */,
 				9DC5FCF32F5281E600AAA478 /* WeekStripView.swift */,
 				9D20EEA32F4F5210003ED567 /* CurrentTaskCardView.swift */,
+				AA11BB002F6A000100DEMO01 /* ConfettiView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				9DC5FCF52F54195200AAA478 /* TaskScheduler.swift */,
 				9DC5FCF72F54195F00AAA478 /* SupabaseScheduleItemRepository.swift */,
 				9D20EEC32F4F5210003ED567 /* ScheduleStore.swift */,
+				AA11BB022F6A000100DEMO02 /* DemoCoordinator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -408,7 +414,6 @@
 				9DE9480C2F50F651009F577D /* Supabase.swift in Sources */,
 				9DC5FCFC2F54199700AAA478 /* ScheduleModePickerView.swift in Sources */,
 				9D20EEB42F4F5210003ED567 /* MainDailyView.swift in Sources */,
-				9DC5FD022F5436A500AAA478 /* BurstTimerStatusView.swift in Sources */,
 				9D20EEB52F4F5210003ED567 /* AppRoute.swift in Sources */,
 				9D20EEB62F4F5210003ED567 /* RootContainerView.swift in Sources */,
 				9DE9736D2F501F0E0065FADE /* TimelineTaskListView.swift in Sources */,
@@ -425,6 +430,9 @@
 				9DC5FCF42F5281E600AAA478 /* WeekStripView.swift in Sources */,
 				9D20EEF82F4F5210003ED567 /* AuthService.swift in Sources */,
 				9D20EEF92F4F5210003ED567 /* LoginView.swift in Sources */,
+				AA11BB012F6A000100DEMO01 /* ConfettiView.swift in Sources */,
+				AA11BB032F6A000100DEMO02 /* DemoCoordinator.swift in Sources */,
+				AA11BB052F6A000100DEMO03 /* DemoRootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

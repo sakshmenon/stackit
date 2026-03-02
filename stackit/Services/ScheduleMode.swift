@@ -20,7 +20,7 @@ enum ScheduleMode: String, CaseIterable, Identifiable, Codable {
     var displayName: String {
         switch self {
         case .priority:        return "Priority"
-        case .reversePriority: return "Low First"
+        case .reversePriority: return "Ramp up"
         case .fifo:            return "FIFO"
         case .lifo:            return "LIFO"
         case .shuffle:         return "Shuffle"

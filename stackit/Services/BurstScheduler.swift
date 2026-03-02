@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 final class BurstScheduler: ObservableObject {
@@ -34,6 +35,8 @@ final class BurstScheduler: ObservableObject {
     @Published private(set) var isRunning: Bool = false
     @Published private(set) var timeRemainingSeconds: Int = 0
     @Published private(set) var activeTaskId: UUID? = nil
+    /// Exact moment the current burst window expires — used by the progress bar for sub-second smoothness.
+    @Published private(set) var countdownEndDate: Date? = nil
 
     /// Set to true when the burst timer fires; cleared by advance(completed:store:).
     @Published var showBurstAlert: Bool = false
@@ -70,7 +73,6 @@ final class BurstScheduler: ObservableObject {
     /// Fix H-A/H-B: accepts the store so it can pin the scheduler's queue order.
     /// Fix H-C: only starts the countdown timer for preemptive mode.
     func start(orderedItems: [ScheduleItem], store: ScheduleStore) {
-        guard schedulerMode != .off else { return }
         stop()
         self.store = store
         queue = orderedItems
@@ -95,6 +97,7 @@ final class BurstScheduler: ObservableObject {
         isRunning    = false
         timeRemainingSeconds = 0
         activeTaskId = nil
+        countdownEndDate = nil
         queue        = []
         showBurstAlert = false
         // Release the queue override so the store returns to normal sorting
@@ -122,14 +125,18 @@ final class BurstScheduler: ObservableObject {
             // Advance queue first, then update the store's visual order, then mark complete.
             // This ensures the single refresh() triggered by setCompleted() sees the correct order.
             popNext()
-            store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
-            store.setCompleted(id: taskId, completed: true)
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
+                store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
+                store.setCompleted(id: taskId, completed: true)
+            }
         } else if schedulerMode == .preemptive {
             // queue.append(current_task); current_task = queue.pop(0)
             queue.append(taskId)
             popNext()
             // Push the updated queue order to the store so the task moves to the bottom visually.
-            store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
+                store.schedulerQueueIds = isRunning ? ([activeTaskId!] + queue) : nil
+            }
         }
         // Non-preemptive has no timer, so this function is only called with completed: true
         // from the "Done ✓" button in BurstTimerStatusView.
@@ -156,6 +163,8 @@ final class BurstScheduler: ObservableObject {
         timerTask?.cancel()
         let totalSeconds = burstTimeMinutes * 60
         timeRemainingSeconds = totalSeconds
+        // Store exact end time so the progress bar can interpolate smoothly at display frame-rate.
+        countdownEndDate = Date().addingTimeInterval(TimeInterval(totalSeconds))
 
         timerTask = Task { @MainActor [weak self] in
             guard let self else { return }
@@ -167,6 +176,7 @@ final class BurstScheduler: ObservableObject {
                 }
                 self.timeRemainingSeconds -= 1
             }
+            self.countdownEndDate = nil
             self.showBurstAlert = true
         }
     }

@@ -22,6 +22,8 @@ struct MainDailyView: View {
 
     @State private var showAddTypeSheet = false
     @State private var pendingAddType: ScheduleItemType?
+    /// Drives the staggered enter animations; set once in onAppear.
+    @State private var appeared = false
 
     init(
         currentTask: TaskItem? = nil,
@@ -53,43 +55,61 @@ struct MainDailyView: View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Date header for the selected day
+                    // Date header — slides in from the left
                     DateTimeHeaderView(date: selectedDate)
+                        .offset(x: appeared ? 0 : -48)
+                        .opacity(appeared ? 1 : 0)
+                        .animation(enter(delay: 0.05), value: appeared)
 
-                    // Week strip — tap a day to view its schedule
+                    // Week strip — slides in from the right
                     WeekStripView(selectedDate: selectedDate, onSelectDate: { date in
                         onSelectDate?(date)
                     })
+                    .offset(x: appeared ? 0 : 48)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(enter(delay: 0.15), value: appeared)
 
+                    // Progress bar — slides in from the left
                     DailyProgressView(progress: progress)
+                        .offset(x: appeared ? 0 : -48)
+                        .opacity(appeared ? 1 : 0)
+                        .animation(enter(delay: 0.25), value: appeared)
 
+                    // Current task card — slides up from below
                     CurrentTaskCardView(
                         task: currentTask,
                         onTap: { if let currentTask { onOpenTask?(currentTask) } },
                         onComplete: onCompleteCurrentTask
                     )
+                    .offset(y: appeared ? 0 : 40)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(enter(delay: 0.35), value: appeared)
 
-                    // Burst scheduler status / start card (preemptive & non-preemptive)
-                    BurstTimerStatusView()
-
-                    // Queue-mode picker (queueing.py modes)
+                    // Queue-mode picker — slides in from the right
                     ScheduleModePickerView(selectedMode: scheduleMode) { newMode in
                         onChangeMode?(newMode)
                     }
+                    .offset(x: appeared ? 0 : 48)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(enter(delay: 0.45), value: appeared)
 
+                    // Task list — slides up from below
                     TimelineTaskListView(
                         tasks: todayTasks,
                         currentTaskId: currentTask?.id,
                         selectedDate: selectedDate,
                         onSelect: { onOpenTask?($0) }
                     )
+                    .offset(y: appeared ? 0 : 50)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(enter(delay: 0.55), value: appeared)
                 }
                 .padding()
                 .padding(.bottom, 96)
             }
             .background(Color(.systemGroupedBackground))
 
-            // Floating action button
+            // FAB — scales up from centre
             Button {
                 showAddTypeSheet = true
             } label: {
@@ -101,6 +121,9 @@ struct MainDailyView: View {
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
             }
+            .scaleEffect(appeared ? 1 : 0.2)
+            .opacity(appeared ? 1 : 0)
+            .animation(enter(delay: 0.65), value: appeared)
             .padding(.bottom, 36)
         }
         .toolbar {
@@ -112,6 +135,7 @@ struct MainDailyView: View {
             }
 #endif
         }
+        .onAppear { appeared = true }
         .sheet(isPresented: $showAddTypeSheet, onDismiss: {
             if let type = pendingAddType {
                 onAddTask?(type)
@@ -123,6 +147,11 @@ struct MainDailyView: View {
                 showAddTypeSheet = false
             }
         }
+    }   // end of body
+
+    /// Shared spring animation for all enter transitions. Each component passes its own delay.
+    private func enter(delay: Double) -> Animation {
+        .spring(response: 0.52, dampingFraction: 0.82).delay(delay)
     }
 }
 

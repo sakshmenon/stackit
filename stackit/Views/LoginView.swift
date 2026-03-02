@@ -11,6 +11,8 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject private var authService: AuthService
+    var onWatchDemo: (() -> Void)? = nil
+
     @State private var email = ""
     @State private var password = ""
     @State private var isSignUp = false
@@ -31,10 +33,11 @@ struct LoginView: View {
                     .overlay(
                         LinearGradient(
                             stops: [
-                                .init(color: .clear,              location: 0.0),
-                                .init(color: .clear,              location: 0.35),
-                                .init(color: Color(.systemBackground).opacity(0.7), location: 0.58),
-                                .init(color: Color(.systemBackground), location: 0.75)
+                                .init(color: .clear,                                    location: 0.00),
+                                .init(color: .clear,                                    location: 0.38),
+                                .init(color: Color(.systemBackground).opacity(0.55),    location: 0.54),
+                                .init(color: Color(.systemBackground).opacity(0.85),    location: 0.62),
+                                .init(color: Color(.systemBackground),                  location: 0.72)
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -42,10 +45,10 @@ struct LoginView: View {
                     )
                     .ignoresSafeArea()
 
-                // MARK: Auth form — sits in the lower half of the screen
+                // MARK: Auth form — anchored to the bottom, fades in from the top
                 ScrollView {
                     VStack(spacing: 22) {
-                        // App name
+                        // App name — sits below the fade zone
                         Text("Dispatch")
                             .font(.largeTitle.weight(.bold))
                             .foregroundStyle(.primary)
@@ -125,16 +128,40 @@ struct LoginView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+
+                        // Demo entry point
+                        if let onWatchDemo {
+                            Button {
+                                onWatchDemo()
+                            } label: {
+                                Label("Watch Demo", systemImage: "play.circle")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(Color.accentColor)
+                            }
+                            .padding(.top, 4)
+                        }
                     }
+                    // Extra top padding pushes content below the transparent fade zone
                     .padding(.horizontal, 28)
-                    .padding(.top, 20)
+                    .padding(.top, 72)
                     .padding(.bottom, 40)
                 }
-                // Constrain the form to the lower portion so the image stays visible above
-                .frame(height: geo.size.height * 0.60)
+                // Form panel occupies the lower 48 % of the screen (lower than before)
+                .frame(height: geo.size.height * 0.48)
                 .background(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .shadow(color: .black.opacity(0.08), radius: 20, y: -4)
+                // Gradient mask: transparent at top → fully opaque ~22 % down.
+                // This dissolves the hard card edge into the image fade above it.
+                .mask(
+                    LinearGradient(
+                        stops: [
+                            .init(color: .clear, location: 0.00),
+                            .init(color: .black.opacity(0.4), location: 0.10),
+                            .init(color: .black, location: 0.22)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
             }
         }
         .ignoresSafeArea()

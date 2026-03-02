@@ -1,6 +1,6 @@
 //
 //  DailyProgressView.swift
-//  stackit
+//  Dispatch
 //
 //  Daily completion progress for the main screen (PRD FR-10, NFR-1 lightweight).
 //

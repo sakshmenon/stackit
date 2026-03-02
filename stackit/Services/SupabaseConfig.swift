@@ -1,6 +1,6 @@
 //
 //  SupabaseConfig.swift
-//  stackit
+//  Dispatch
 //
 //  Supabase project URL and anon key. Replace with your project values from Supabase Dashboard → Settings → API.
 //

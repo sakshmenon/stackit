@@ -1,6 +1,6 @@
 //
 //  CurrentTaskCardView.swift
-//  stackit
+//  Dispatch
 //
 //  Displays basic info about the current/next task (PRD FR-12 minimalistic daily view).
 //

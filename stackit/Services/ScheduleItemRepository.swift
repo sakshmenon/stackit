@@ -1,6 +1,6 @@
 //
 //  ScheduleItemRepository.swift
-//  stackit
+//  Dispatch
 //
 //  Abstraction for task/event persistence. In-memory impl now; Supabase impl in a later iteration (PROJECT_TIMELINE Day 2–3).
 //

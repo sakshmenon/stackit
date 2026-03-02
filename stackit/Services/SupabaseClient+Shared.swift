@@ -1,6 +1,6 @@
 //
 //  SupabaseClient+Shared.swift
-//  stackit
+//  Dispatch
 //
 //  Convenience accessor so call sites can use SupabaseClient.shared.
 //

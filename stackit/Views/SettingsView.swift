@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  stackit
+//  Dispatch
 //
 //  Account and app settings; sign out (PRD FR-14).
 //

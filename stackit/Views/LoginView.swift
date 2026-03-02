@@ -1,8 +1,10 @@
 //
 //  LoginView.swift
-//  stackit
+//  Dispatch
 //
 //  Sign-in and sign-up with email/password via Supabase (PRD FR-1).
+//  Full-screen background image fades from prominent at top to clear at bottom,
+//  with the auth form anchored to the centre-bottom of the screen.
 //
 
 import SwiftUI
@@ -17,83 +19,125 @@ struct LoginView: View {
     @State private var isLoading = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                Text("Stackit")
-                    .font(.largeTitle.weight(.bold))
-                    .padding(.bottom, 8)
+        GeometryReader { geo in
+            ZStack(alignment: .bottom) {
 
-                VStack(spacing: 14) {
-                    OutlinedField {
-                        TextField("Email", text: $email)
-                            .textContentType(.emailAddress)
-                            #if os(iOS)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            #endif
-                    }
+                // MARK: Background image — fades from full at top to clear at bottom
+                Image("LoginBackground")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+                    .overlay(
+                        LinearGradient(
+                            stops: [
+                                .init(color: .clear,              location: 0.0),
+                                .init(color: .clear,              location: 0.35),
+                                .init(color: Color(.systemBackground).opacity(0.7), location: 0.58),
+                                .init(color: Color(.systemBackground), location: 0.75)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .ignoresSafeArea()
 
-                    OutlinedField {
-                        SecureField("Password", text: $password)
-                            .textContentType(isSignUp ? .newPassword : .password)
-                    }
-                }
+                // MARK: Auth form — sits in the lower half of the screen
+                ScrollView {
+                    VStack(spacing: 22) {
+                        // App name
+                        Text("Dispatch")
+                            .font(.largeTitle.weight(.bold))
+                            .foregroundStyle(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
-                if let msg = confirmationMessage {
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: "envelope.badge.checkmark")
-                            .foregroundStyle(Color.accentColor)
-                        Text(msg)
-                            .font(.caption)
-                            .foregroundStyle(Color.accentColor)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.accentColor.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                }
+                        // Input fields
+                        VStack(spacing: 12) {
+                            OutlinedInputField {
+                                TextField("Email", text: $email)
+                                    .textContentType(.emailAddress)
+                                    #if os(iOS)
+                                    .keyboardType(.emailAddress)
+                                    .textInputAutocapitalization(.never)
+                                    #endif
+                            }
 
-                if let msg = errorMessage {
-                    Text(msg)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
-                }
+                            OutlinedInputField {
+                                SecureField("Password", text: $password)
+                                    .textContentType(isSignUp ? .newPassword : .password)
+                            }
+                        }
 
-                Button {
-                    Task { await submit() }
-                } label: {
-                    Group {
-                        if isLoading {
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                                .tint(.white)
-                        } else {
-                            Text(isSignUp ? "Sign up" : "Sign in")
-                                .fontWeight(.semibold)
+                        // Confirmation banner
+                        if let msg = confirmationMessage {
+                            HStack(alignment: .top, spacing: 8) {
+                                Image(systemName: "envelope.badge.checkmark")
+                                    .foregroundStyle(Color.accentColor)
+                                Text(msg)
+                                    .font(.caption)
+                                    .foregroundStyle(Color.accentColor)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            .padding(12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.accentColor.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+
+                        // Error message
+                        if let msg = errorMessage {
+                            Text(msg)
+                                .font(.caption)
+                                .foregroundStyle(.red)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+                        }
+
+                        // Submit button
+                        Button {
+                            Task { await submit() }
+                        } label: {
+                            Group {
+                                if isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(.circular)
+                                        .tint(.white)
+                                } else {
+                                    Text(isSignUp ? "Sign up" : "Sign in")
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(Color.accentColor)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || isLoading)
+
+                        // Toggle sign-in / sign-up
+                        Button {
+                            isSignUp.toggle()
+                            errorMessage = nil
+                            confirmationMessage = nil
+                        } label: {
+                            Text(isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(Color.accentColor)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal, 28)
+                    .padding(.top, 20)
+                    .padding(.bottom, 40)
                 }
-                .disabled(email.isEmpty || password.isEmpty || isLoading)
-
-                Button {
-                    isSignUp.toggle()
-                    errorMessage = nil
-                    confirmationMessage = nil
-                } label: {
-                    Text(isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                // Constrain the form to the lower portion so the image stays visible above
+                .frame(height: geo.size.height * 0.60)
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .shadow(color: .black.opacity(0.08), radius: 20, y: -4)
             }
-            .padding(32)
         }
+        .ignoresSafeArea()
         .onOpenURL { url in
             Task { _ = try? await supabase.auth.handle(url) }
         }
@@ -118,21 +162,20 @@ struct LoginView: View {
     }
 }
 
-// MARK: - Outlined Field Wrapper
+// MARK: - Outlined input field wrapper
 
-/// A simple outlined container for text inputs.
-private struct OutlinedField<Content: View>: View {
+private struct OutlinedInputField<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
         content
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
-            .background(.background)
+            .background(Color(.systemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.secondary.opacity(0.35), lineWidth: 1)
+                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
             }
     }
 }

@@ -1,6 +1,6 @@
 //
 //  AddEditTaskView.swift
-//  stackit
+//  Dispatch
 //
 //  Create or edit a task/event. Wired to ScheduleStore add/update (PRD FR-3, FR-4).
 //

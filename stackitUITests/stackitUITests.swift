@@ -1,13 +1,13 @@
 //
 //  stackitUITests.swift
-//  stackitUITests
+//  DispatchUITests
 //
 //  Created by saksh menon on 2/25/26.
 //
 
 import XCTest
 
-final class stackitUITests: XCTestCase {
+final class DispatchUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

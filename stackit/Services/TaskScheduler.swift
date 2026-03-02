@@ -1,6 +1,6 @@
 //
 //  TaskScheduler.swift
-//  stackit
+//  Dispatch
 //
 //  Swift port of schedulers/queueing.py — five task-ordering strategies (PRD FR-6).
 //  Each static function mirrors its Python counterpart 1-to-1.

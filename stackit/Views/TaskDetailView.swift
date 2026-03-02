@@ -1,6 +1,6 @@
 //
 //  TaskDetailView.swift
-//  stackit
+//  Dispatch
 //
 //  Task/event detail with complete, edit, and delete (PRD FR-13). Wired to ScheduleStore.
 //

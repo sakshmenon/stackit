@@ -1,6 +1,6 @@
 //
 //  ScheduleModePickerView.swift
-//  stackit
+//  Dispatch
 //
 //  Compact horizontal picker for the five task-ordering modes (queueing.py).
 //

@@ -1,6 +1,6 @@
 //
 //  ScheduleMode.swift
-//  stackit
+//  Dispatch
 //
 //  Five task-ordering strategies, matching queueing.py (PROJECT_TIMELINE Day 5).
 //

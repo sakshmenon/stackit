@@ -1,6 +1,6 @@
 //
 //  ScheduleStore.swift
-//  stackit
+//  Dispatch
 //
 //  Observable store over the schedule repository. Exposes today's items, progress, and current task (PROJECT_TIMELINE Day 2).
 //

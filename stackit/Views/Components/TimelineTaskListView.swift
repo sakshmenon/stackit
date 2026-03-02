@@ -1,6 +1,6 @@
 //
 //  TimelineTaskListView.swift
-//  stackit
+//  Dispatch
 //
 //  Vertical timeline list for a day's tasks/events with a line and dots per item.
 //  Task order is determined by the active ScheduleMode in ScheduleStore — this view renders as-is.

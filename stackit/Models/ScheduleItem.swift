@@ -1,6 +1,6 @@
 //
 //  ScheduleItem.swift
-//  stackit
+//  Dispatch
 //
 //  Full data model for schedule tasks and events (PROJECT_TIMELINE Day 2, PRD data model).
 //

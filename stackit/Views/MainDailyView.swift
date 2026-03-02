@@ -1,6 +1,6 @@
 //
 //  MainDailyView.swift
-//  stackit
+//  Dispatch
 //
 //  Main page: date header, week strip, daily progress, current task, timeline (PRD FR-12).
 //

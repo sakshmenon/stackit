@@ -1,6 +1,6 @@
 //
 //  InMemoryScheduleItemRepository.swift
-//  stackit
+//  Dispatch
 //
 //  In-memory implementation of ScheduleItemRepository. Replace with Supabase-backed impl when persisting (NFR-2).
 //

@@ -1,6 +1,6 @@
 //
 //  BurstScheduler.swift
-//  stackit
+//  Dispatch
 //
 //  Swift port of driver.py:29-60 (preemptive and non_preemptive schedulers).
 //

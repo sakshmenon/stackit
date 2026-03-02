@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  stackit
+//  Dispatch
 //
 //  Root auth gate: shows LoginView when signed out, main app with Supabase-backed
 //  ScheduleStore when signed in.

@@ -1,6 +1,6 @@
 //
 //  BurstTimerStatusView.swift
-//  stackit
+//  Dispatch
 //
 //  Shows the active burst-scheduler state inline on the main daily view.
 //  Renders nothing when scheduler mode is .off.

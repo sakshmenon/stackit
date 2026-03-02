@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  stackit
+//  Dispatch
 //
 //  Root content: auth gate, schedule store, and main navigation (PRD FR-1).
 //

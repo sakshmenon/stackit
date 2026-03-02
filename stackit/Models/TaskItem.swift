@@ -1,6 +1,6 @@
 //
 //  TaskItem.swift
-//  stackit
+//  Dispatch
 //
 //  Lightweight display model for the main daily view. Full domain model: ScheduleItem (ScheduleItem.swift).
 //

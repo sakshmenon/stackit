@@ -1,6 +1,6 @@
 //
 //  AuthService.swift
-//  stackit
+//  Dispatch
 //
 //  Supabase Auth: sign-in, sign-up, sign-out, session. PRD FR-1.
 //

@@ -1,6 +1,6 @@
 //
 //  BurstSchedulerMode.swift
-//  stackit
+//  Dispatch
 //
 //  Preemptive vs non-preemptive scheduling modes (driver.py:29-60).
 //

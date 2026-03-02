@@ -1,6 +1,6 @@
 //
 //  RootContainerView.swift
-//  stackit
+//  Dispatch
 //
 //  Root navigation container: NavigationStack with main daily view and destination routing.
 //

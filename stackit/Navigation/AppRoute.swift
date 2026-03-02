@@ -1,6 +1,6 @@
 //
 //  AppRoute.swift
-//  stackit
+//  Dispatch
 //
 //  Type-safe navigation destinations (PROJECT_TIMELINE Day 1 – navigation scaffolding).
 //

@@ -1,6 +1,6 @@
 //
 //  SupabaseScheduleItemRepository.swift
-//  stackit
+//  Dispatch
 //
 //  Supabase-backed implementation of ScheduleItemRepository.
 //  Sync protocol methods operate on an in-memory cache (optimistic).

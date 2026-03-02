@@ -1,13 +1,13 @@
 //
 //  stackitUITestsLaunchTests.swift
-//  stackitUITests
+//  DispatchUITests
 //
 //  Created by saksh menon on 2/25/26.
 //
 
 import XCTest
 
-final class stackitUITestsLaunchTests: XCTestCase {
+final class DispatchUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

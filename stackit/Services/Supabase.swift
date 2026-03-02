@@ -1,6 +1,6 @@
 //
 //  Supabase.swift
-//  stackit
+//  Dispatch
 //
 //  Shared Supabase client instance. Referenced throughout the app via SupabaseClient.shared.
 //

@@ -1,6 +1,6 @@
 //
 //  DateTimeHeaderView.swift
-//  stackit
+//  Dispatch
 //
 //  Date header for the main daily view (PRD FR-12).
 //  Shows month + day for the selected date; today gets a live "time remaining" countdown.

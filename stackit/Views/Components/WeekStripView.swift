@@ -1,6 +1,6 @@
 //
 //  WeekStripView.swift
-//  stackit
+//  Dispatch
 //
 //  Horizontal Sunday–Saturday week strip for the main daily view.
 //  Tapping a day calls onSelectDate; the selected day is highlighted.

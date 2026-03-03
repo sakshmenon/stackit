@@ -70,6 +70,7 @@ struct DemoRootView: View {
         VStack {
             Spacer()
             HStack {
+                Spacer()
                 Button {
                     coordinator.stop()
                     onExit()
@@ -81,9 +82,8 @@ struct DemoRootView: View {
                         .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 20)
+                .padding(.trailing, 20)
                 .padding(.bottom, 36)
-                Spacer()
             }
         }
     }

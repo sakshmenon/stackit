@@ -121,7 +121,7 @@ final class DemoCoordinator: ObservableObject {
         await pause(1.5)
 
         // ── 3. Preemptive scheduler ─────────────────────────────────────────
-        showCaption("Preemptive: burst timer — let it run out")
+        showCaption("Preemptive: Work in bursts")
         scheduler.schedulerMode = .preemptive
         scheduler.burstTimeMinutes = 1    // 1-minute burst so the timer visibly counts down
         await pause(1.2)
@@ -130,7 +130,9 @@ final class DemoCoordinator: ObservableObject {
 
         // Let the burst timer expire naturally so the user sees the task pushed back
         await waitForBurstAlert()
-        showCaption("Time's up  —  task pushed back to queue")
+        // Small delay so the user sees the queue rearrange animation before the caption
+        await pause(0.6)
+        showCaption("Time's up  —  Incomplete tasks pushed down")
         scheduler.advance(completed: false, store: store)
         await pause(2.5)
 
